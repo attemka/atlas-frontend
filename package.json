@@ -4,7 +4,6 @@
   "description": "Front-end for atlas system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "webpack-dev-server --open"
   },
@@ -19,7 +18,9 @@
     "path": "^0.12.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-table": "^6.7.4"
+    "react-hot-loader": "^3.1.1",
+    "react-table": "^6.7.4",
+    "webpack-dashboard": "^1.0.0"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",

@@ -7,7 +7,7 @@ class Table extends Component {
   render() {
     return (
       <div className="table">
-        <div className="wrap">test watafak</div>
+        <div className="wrap">test</div>
       </div>
     );
   }
