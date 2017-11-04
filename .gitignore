@@ -3,6 +3,12 @@ logs
 *.log
 npm-debug.log*
 
+#Idea settings
+.idea
+
+#Webpack dist
+dist
+
 # Runtime data
 pids
 *.pid
