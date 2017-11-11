@@ -79,7 +79,7 @@ loaders.push({
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    './src/index.jsx', // your app's entry point
+    './src/index.js', // your app's entry point
   ],
   devtool: process.env.WEBPACK_DEVTOOL || 'eval-source-map',
   output: {
@@ -94,7 +94,7 @@ module.exports = {
     loaders
   },
   devServer: {
-    contentBase: "./dust",
+    contentBase: "./dist",
     // do not print bundle build stats
     noInfo: true,
     // enable HMR
