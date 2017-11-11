@@ -7,14 +7,12 @@ import Routes from './routes';
 import App from './containers/App';
 
 class Root extends Component {
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-  };
 
   render() {
-    const { store } = this.props;
+    //const { store } = this.props;
     return (
-      <Provider store={store}>
+      <Provider>
+      {/*<Provider store={store}>*/}
           <Router>
             <Switch>
               <App>
@@ -23,7 +21,7 @@ class Root extends Component {
             </Switch>
           </Router>
       </Provider>
-    );
+    )
   }
 }
 
