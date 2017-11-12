@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import Home from "./containers/Home";
 import App from "./containers/App";
 import Home from "./containers/Home"
 import Login from "./containers/Login"
-
-//export const LoginRoute = <Route path="/login" component={} />;
 
 export default (
   <Switch>
