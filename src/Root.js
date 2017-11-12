@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
+import browserHistory from "react-router";
 import setUpStore from "./store";
 
 import Routes from "./routes";
@@ -17,11 +18,7 @@ class Root extends Component {
     if (!this.state.store) return <div>Loading...</div>;
     return (
       <Provider store={this.state.store}>
-        <Router>
-          <Switch>
-            <App>{Routes}</App>
-          </Switch>
-        </Router>
+        <Router routes={Routes} history={browserHistory} />
       </Provider>
     );
   }
