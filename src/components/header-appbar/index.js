@@ -6,7 +6,7 @@ class HeaderAppbar extends Component {
     const { isLogged, isAdmin, userName } = this.props;
     return (
       <div className="header-appbar">
-        {isLogged ? <div className="user-page">Hello, {userName}</div> : <button className="login-btn">Login</button>}
+        {isLogged ? <div className="user-page">Hello, {userName}</div> : <button className="header-login-btn">Login</button>}
       </div>
     );
   }
