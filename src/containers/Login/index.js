@@ -2,18 +2,12 @@ import React, { Component } from "react";
 import "./Login.scss";
 
 class Login extends Component {
-  login() {
-    //login here
-  }
-
   render() {
     return (
-      <div className="login-wrap">
+      <div className="login-wrapper">
         <input type="text" className="login-input" />
         <input type="password" className="login-input" />
-        <button className="login-btn" onClick={this.login}>
-          Войти
-        </button>
+        <button className="login-btn">Войти</button>
       </div>
     );
   }
