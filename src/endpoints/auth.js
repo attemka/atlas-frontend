@@ -13,7 +13,7 @@ function successAuth(state, email, password){
 }
 
 export default {
-  entry:'users/auth'
+  entry:'users/auth',
   skipFormat:true,
   initialState: initialState,
   reducer(state, action){

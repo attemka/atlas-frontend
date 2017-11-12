@@ -8,9 +8,10 @@ import api from './api'
 
 const middlewares = [
   reduxThunk,
-  shopUrlMiddleware,
+  urlMiddleware,
   fetchMiddleware,
   promiseMiddleware,
+  unwrapMiddleware
 ]
 
 const enhancers = [applyMiddleware(...middlewares)]
@@ -18,7 +19,7 @@ const enhancers = [applyMiddleware(...middlewares)]
 const reducers = combineReducers(Object.assign({}, api.reducers))
 
 
-export default setUpStore(){
+export default function setUpStore(){
   return getDefaultStorage()
 }
 
@@ -28,6 +29,6 @@ function getDefaultStorage(){
     {},
     compose(...enhancers)
   )
-  if(__DEV__) global.store = store
+  global.store = store
   return store
 }
