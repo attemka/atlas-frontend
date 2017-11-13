@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Provider } from "react-redux";
 import { BrowserRouter, browserHistory } from "react-router-dom";
 import setUpStore from "./store";
+import 'purecss/build/pure.css'
 
 import routes from "./routes";
 import App from "./containers/App";

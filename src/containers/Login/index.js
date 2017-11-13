@@ -1,18 +1,55 @@
-import React, { Component } from "react";
-import "./Login.scss";
+import React, { Component } from 'react';
+import './Login.scss';
 
 class Login extends Component {
-  render() {
-    return (
-      <div className="page-wrapper">
-        <div className="login-wrapper">
-          <input placeholder="Логин" type="text" className="login-input" />
-          <input placeholder="Пароль" type="password" className="login-input" />
-          <button className="login-btn">Войти</button>
-        </div>
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: null,
+            password: null,
+        };
+    }
+
+    handleChange = e => {
+        let field = e.target.placeholder === 'E-mail' ? 'email' : 'password';
+        let obj = {};
+        obj[field] = e.target.value;
+        this.setState({
+            obj,
+        });
+    };
+
+    render() {
+        let { email, password } = this.state;
+        console.log(email, password);
+        return (
+            <div className="page-wrapper">
+                <div className="login-wrapper">
+                    <form className="pure-form pure-form-stacked">
+                        <fieldset>
+                            <input
+                                placeholder="E-mail"
+                                value={email}
+                                onBlur={e => this.handleChange(e)}
+                                type="text"
+                                required
+                            />
+                            <input
+                                placeholder="Пароль"
+                                value={password}
+                                onBlur={e => this.handleChange(e)}
+                                type="password"
+                                required
+                            />
+                            <button className="pure-button pure-button-primary">
+                                Войти
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default Login;
