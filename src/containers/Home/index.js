@@ -4,8 +4,10 @@ import "./Home.scss";
 class Home extends Component {
   render() {
     return (
-      <div className="home-wrapper">
-        Home sweet home
+      <div class="home-wrapper">
+        <div>
+          Домашняя
+        </div>
       </div>
     );
   }

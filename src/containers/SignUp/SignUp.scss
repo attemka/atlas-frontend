@@ -2,9 +2,10 @@
 
 .signup-page-wrapper {
   background-color: $main-background-color;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  flex:auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .signup-wrapper {
@@ -19,7 +20,7 @@
   transform: translate(-50%, -50%);
   box-shadow: 5px 6px 5px 3px #bbb;
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-

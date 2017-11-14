@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import {browserHistory} from 'react-router'
 import { signup } from "../../actions/LoginActions";
 import "./SignUp.scss";
 
@@ -46,6 +47,7 @@ class SignUp extends Component {
             passwordValid: true,
             error:false
           });
+          browserHistory.push('/')
         })
         .catch(error => {
           console.error(error);

@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {browserHistory} from 'react-router'
 import { login } from '../../actions/LoginActions';
 import './Login.scss';
+import PropTypes from "prop-types"
 
 class Login extends Component {
+
+  static propTypes = {
+   history: PropTypes.object.isRequired
+ }
     constructor(props) {
         super(props);
         this.state = {
@@ -29,6 +35,7 @@ class Login extends Component {
                     password: '',
                     loginFailed: false,
                 });
+                browserHistory.push('/')
             })
             .catch(error => {
                 this.setState({
@@ -40,6 +47,7 @@ class Login extends Component {
     };
 
     render() {
+      console.log(this.props.history)
         let { email, password, loginFailed } = this.state;
         return (
             <div className="page-wrapper">

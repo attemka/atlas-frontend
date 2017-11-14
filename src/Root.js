@@ -6,7 +6,6 @@ import setUpStore from "./store";
 import "purecss/build/pure.css";
 
 import routes from "./routes";
-import App from "./containers/App";
 
 class Root extends Component {
   componentWillMount = () => {
