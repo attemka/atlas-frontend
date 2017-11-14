@@ -17,3 +17,23 @@ export function login(email, password){
     }
   }
 }
+
+export function signup(name, email, password, passwordRepeat) {
+  return {
+    types: actionTypesFor('create', 'auth'),
+    meta:{
+      fetch:{
+        url: '~user/auth',
+        method: 'POST',
+        data:{
+          name,
+          email,
+          password,
+          password_confirmation: passwordRepeat,
+        }
+      },
+      email,
+      password,
+    }
+  }
+}
