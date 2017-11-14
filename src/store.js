@@ -12,11 +12,19 @@ const enhancers = [applyMiddleware(...middlewares)];
 const reducers = combineReducers(Object.assign({}, api.reducers));
 
 export default function setUpStore() {
-  return getDefaultStorage();
+  const state = localStorage.getItem('storeState')
+  return state ? getStatedStorage(state) : getDefaultStorage();
 }
 
 function getDefaultStorage() {
   const store = createStore(reducers, {}, compose(...enhancers));
   global.store = store;
   return store;
+}
+
+function getStatedStorage(state) {
+  const jsonState = JSON.parse(state)
+  const store = createStore(reducers, jsonState, compose(...enhancers))
+  global.store = store
+  return store
 }
