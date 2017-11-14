@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux';
 import './Login.scss';
-import {login} from '../../actions/LoginActions'
+import { login } from '../../actions/LoginActions';
 
 class Login extends Component {
     constructor(props) {
@@ -9,6 +9,7 @@ class Login extends Component {
         this.state = {
             email: null,
             password: null,
+            loginFailed: false,
         };
     }
 
@@ -20,13 +21,26 @@ class Login extends Component {
     };
 
     handlePress = () => {
-      console.log(this.state)
-      this.props.login(this.state.email, this.state.password)
-    }
+        this.props
+            .login(this.state.email, this.state.password)
+            .then(response => {
+                this.setState({
+                    email: '',
+                    password: '',
+                    loginFailed: false,
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    email: '',
+                    password: '',
+                    loginFailed: true,
+                });
+            });
+    };
 
     render() {
-        let { email, password } = this.state;
-        console.log(email, password);
+        let { email, password, loginFailed } = this.state;
         return (
             <div className="page-wrapper">
                 <div className="login-wrapper">
@@ -35,19 +49,30 @@ class Login extends Component {
                             <input
                                 placeholder="E-mail"
                                 value={email}
-                                onBlur={e => this.handleChange(e)}
+                                onChange={e => this.handleChange(e)}
                                 type="text"
                                 required
                             />
                             <input
                                 placeholder="Пароль"
                                 value={password}
-                                onBlur={e => this.handleChange(e)}
+                                onChange={e => this.handleChange(e)}
                                 type="password"
                                 required
                             />
-                            <button type="button" className="pure-button pure-button-primary"
-                              onClick={()=>this.handlePress()}>
+                            {loginFailed && (
+                                <span
+                                    class="pure-form-message"
+                                    style={{ color: 'red' }}
+                                >
+                                    Неправильный E-mail или пароль.
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                className="pure-button pure-button-primary"
+                                onClick={() => this.handlePress()}
+                            >
                                 Войти
                             </button>
                         </fieldset>
@@ -58,4 +83,4 @@ class Login extends Component {
     }
 }
 
-export default connect(null, {login})(Login);
+export default connect(null, { login })(Login);
