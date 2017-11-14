@@ -8,7 +8,7 @@ export default store => next => action => {
   if (isValidFetchingAction(action) && action.meta.fetch.url[0] == "~") {
     const { auth } = store.getState();
     action = cloneDeep(action);
-    action.meta.fetch.url = toEndPointUrl(loginData, action.meta.fetch.url);
+    action.meta.fetch.url = toEndPointUrl( action.meta.fetch.url);
     action.meta.fetch.headers = {
       Authorization: "Token " + auth.token
     };

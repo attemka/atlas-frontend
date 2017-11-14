@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import './Login.scss';
+import {login} from '../../actions/LoginActions'
 
 class Login extends Component {
     constructor(props) {
@@ -14,10 +16,13 @@ class Login extends Component {
         let field = e.target.placeholder === 'E-mail' ? 'email' : 'password';
         let obj = {};
         obj[field] = e.target.value;
-        this.setState({
-            obj,
-        });
+        this.setState(obj);
     };
+
+    handlePress = () => {
+      console.log(this.state)
+      this.props.login(this.state.email, this.state.password)
+    }
 
     render() {
         let { email, password } = this.state;
@@ -41,7 +46,8 @@ class Login extends Component {
                                 type="password"
                                 required
                             />
-                            <button className="pure-button pure-button-primary">
+                            <button type="button" className="pure-button pure-button-primary"
+                              onClick={()=>this.handlePress()}>
                                 Войти
                             </button>
                         </fieldset>
@@ -52,4 +58,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default connect(null, {login})(Login);
