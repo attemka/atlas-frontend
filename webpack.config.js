@@ -76,51 +76,57 @@ loaders.push({
   exclude: ['node_modules']
 });
 
-module.exports = {
-  entry: [
-    'react-hot-loader/patch',
-    './src/index.js', // your app's entry point
-  ],
-  devtool: process.env.WEBPACK_DEVTOOL || 'eval-source-map',
-  output: {
-    publicPath: '/',
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js'
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  module: {
-    loaders
-  },
-  devServer: {
-    contentBase: "./dist",
-    // do not print bundle build stats
-    noInfo: true,
-    // enable HMR
-    hot: true,
-    // embed the webpack-dev-server runtime into the bundle
-    inline: true,
-    // serve index.html in place of 404 responses to allow HTML5 history
-    historyApiFallback: true,
-    port: PORT,
-    host: HOST
-  },
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin({
-      filename: 'style.css',
-      allChunks: true
-    }),
-    new DashboardPlugin(),
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      files: {
-        css: ['style.css'],
-        js: [ "bundle.js"],
-      }
-    }),
-  ]
-};
+module.exports = env =>
+{
+  return {
+    entry: [
+      'react-hot-loader/patch',
+      './src/index.js', // your app's entry point
+    ],
+    devtool: process.env.WEBPACK_DEVTOOL || 'eval-source-map',
+    output: {
+      publicPath: '/',
+      path: path.join(__dirname, 'dist'),
+      filename: 'bundle.js'
+    },
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
+    module: {
+      loaders
+    },
+    devServer: {
+      contentBase: "./dist",
+      // do not print bundle build stats
+      noInfo: true,
+      // enable HMR
+      hot: true,
+      // embed the webpack-dev-server runtime into the bundle
+      inline: true,
+      // serve index.html in place of 404 responses to allow HTML5 history
+      historyApiFallback: true,
+      port: PORT,
+      host: HOST
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        __DEV__: env.DEV
+      }),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.NamedModulesPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
+      new ExtractTextPlugin({
+        filename: 'style.css',
+        allChunks: true
+      }),
+      new DashboardPlugin(),
+      new HtmlWebpackPlugin({
+        template: './src/index.html',
+        files: {
+          css: ['style.css'],
+          js: [ "bundle.js"],
+        }
+      }),
+    ]
+  }
+}
