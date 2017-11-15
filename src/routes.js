@@ -1,15 +1,9 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Redirect, IndexRoute } from "react-router";
 import App from "./containers/App";
+import Home from "./containers/Home";
+import Login from "./containers/Login";
 
-//export const LoginRoute = <Route path="/login" component={} />;
+const routes = <Route path="/" component={App} />;
 
-export default (
-  <Switch>
-    <Route exact path="/" component={App} />
-    <Route path="*" component={App}>
-      {/*<Route path="/anypath" component={anycomponent} />*/}
-      <Redirect to="/" />
-    </Route>
-  </Switch>
-);
+export default routes;

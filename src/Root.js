@@ -1,27 +1,29 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter, browserHistory } from "react-router-dom";
 import setUpStore from "./store";
+import "purecss/build/pure.css";
 
-import Routes from "./routes";
-import App from "./containers/App";
+import routes from "./routes";
 
 class Root extends Component {
   componentWillMount = () => {
     const store = setUpStore();
     this.setState({ store });
+    store.subscribe(this.handleDispatch);
+  };
+
+  handleDispatch = () => {
+    const state = this.state.store.getState();
+    localStorage.setItem("storeState", JSON.stringify(state));
   };
 
   render() {
     if (!this.state.store) return <div>Loading...</div>;
     return (
       <Provider store={this.state.store}>
-        <Router>
-          <Switch>
-            <App>{Routes}</App>
-          </Switch>
-        </Router>
+        <BrowserRouter>{routes}</BrowserRouter>
       </Provider>
     );
   }
