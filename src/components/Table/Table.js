@@ -2,38 +2,21 @@ import React, { Component } from "react";
 import "./Table.scss";
 import "react-table/react-table.css";
 import ReactTable from "react-table";
+import {connect} from 'react-redux';
+import {getProducts} from "../../actions/ProductsActions"
 
 class Table extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: ""
-    };
-    this.fetchData();
-  }
-  fetchData() {
-    let params = {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-      headers: {
-        Authorization: "Token a2lsaW1hbmdhcmFAeWFuZGV4LnJ1OjEzMTE5Ng=="
-      }
-    };
 
-    fetch("https://attemka.ru/products/all", params)
-      .then(result => result.json())
-      .then(result => this.setState({ data: result.data.results }));
+  componentWillMount = ()=> {
+    this.props.getProducts()
   }
 
   render() {
-    let { data } = this.state;
-    console.log(data);
+    console.log(this.props.productsx);
     return (
       <div className="table">
-        {data && (
           <ReactTable
-            data={data}
+            data={this.props.products}
             manual
             showPageSizeOptions={false}
             columns={[
@@ -61,12 +44,14 @@ class Table extends Component {
                 Header: "Комментарий",
                 accessor: "comment"
               }
-            ]}
-          />
-        )}
+            ]}/>
       </div>
     );
   }
 }
 
-export default Table;
+const mapStateToProps = state => ({
+  products: state.products.productsList
+})
+
+export default connect(mapStateToProps, {getProducts})(Table);

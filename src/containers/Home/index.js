@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import "./Home.scss";
+import Table from '../../components/Table/Table'
 
 class Home extends Component {
   render() {
     return (
-      <div class="home-wrapper">
-        <div>
-          Домашняя
+      <div className="home-wrapper">
+        <div className="table">
+          <Table/>
         </div>
       </div>
     );

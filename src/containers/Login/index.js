@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {browserHistory} from 'react-router'
+import {Redirect} from 'react-router-dom'
 import { login } from '../../actions/LoginActions';
 import './Login.scss';
 import PropTypes from "prop-types"
@@ -16,6 +16,7 @@ class Login extends Component {
             email: null,
             password: null,
             loginFailed: false,
+            loginPassed: this.props.isLogged
         };
     }
 
@@ -34,8 +35,8 @@ class Login extends Component {
                     email: '',
                     password: '',
                     loginFailed: false,
+                    loginPassed: true
                 });
-                browserHistory.push('/')
             })
             .catch(error => {
                 this.setState({
@@ -52,6 +53,7 @@ class Login extends Component {
         return (
             <div className="page-wrapper">
                 <div className="login-wrapper">
+                    {this.state.loginPassed ? <Redirect to='/'/> : null}
                     <form className="pure-form pure-form-stacked">
                         <fieldset>
                             <input
@@ -91,4 +93,8 @@ class Login extends Component {
     }
 }
 
-export default connect(null, { login })(Login);
+const mapStateToProps = state => ({
+  isLogged : state.auth.authenticated
+})
+
+export default connect(mapStateToProps, { login })(Login);
