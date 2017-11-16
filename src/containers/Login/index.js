@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 import { login } from '../../actions/LoginActions';
 import './Login.scss';
-import PropTypes from "prop-types"
+import PropTypes from 'prop-types';
 
 class Login extends Component {
-
-  static propTypes = {
-   history: PropTypes.object.isRequired
- }
+    static propTypes = {
+        history: PropTypes.object.isRequired,
+    };
     constructor(props) {
         super(props);
         this.state = {
             email: null,
             password: null,
             loginFailed: false,
-            loginPassed: this.props.isLogged
+            loginPassed: this.props.isLogged,
         };
     }
 
@@ -35,7 +34,7 @@ class Login extends Component {
                     email: '',
                     password: '',
                     loginFailed: false,
-                    loginPassed: true
+                    loginPassed: true,
                 });
             })
             .catch(error => {
@@ -48,12 +47,12 @@ class Login extends Component {
     };
 
     render() {
-      console.log(this.props.history)
+        console.log(this.props.history);
         let { email, password, loginFailed } = this.state;
         return (
             <div className="page-wrapper">
                 <div className="login-wrapper">
-                    {this.state.loginPassed ? <Redirect to='/'/> : null}
+                    {this.state.loginPassed ? <Redirect to="/" /> : null}
                     <form className="pure-form pure-form-stacked">
                         <fieldset>
                             <input
@@ -94,7 +93,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLogged : state.auth.authenticated
-})
+    isLogged: state.auth.authenticated,
+});
 
 export default connect(mapStateToProps, { login })(Login);
