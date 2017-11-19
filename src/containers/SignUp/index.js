@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Redirect} from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import { signup } from "../../actions/LoginActions";
 import "./SignUp.scss";
 
@@ -46,10 +46,10 @@ class SignUp extends Component {
             loginFailed: false,
             emailValid: true,
             passwordValid: true,
-            error:false,
+            error: false,
             authPassed: true
           });
-          browserHistory.push('/')
+          browserHistory.push("/");
         })
         .catch(error => {
           console.error(error);
@@ -74,7 +74,7 @@ class SignUp extends Component {
     return (
       <div className="signup-page-wrapper">
         <div className="signup-wrapper">
-          {this.state.authPassed ? <Redirect to='/'/> : null}
+          {this.state.authPassed ? <Redirect to="/" /> : null}
           <form className="pure-form pure-form-stacked">
             <fieldset>
               <input placeholder="Имя" value={name} onChange={e => this.handleChange(e)} type="text" required />
@@ -128,9 +128,8 @@ class SignUp extends Component {
   }
 }
 
-
 const mapStateToProps = state => ({
-  isLogged : state.auth.authenticated
-})
+  isLogged: state.auth.authenticated
+});
 
 export default connect(mapStateToProps, { signup })(SignUp);
