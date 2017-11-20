@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 import { login } from "../../actions/LoginActions";
-import "./Login.scss";
+import "./Requests.scss";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
-import Table from "../../components/Table";
+import Table from "../../components/Table/Table";
 
 class Requests extends Component {
   static propTypes = {
@@ -67,26 +68,36 @@ class Requests extends Component {
           {this.state.loginPassed ? null : <Redirect to="/" />}
           <form className="pure-form pure-form-aligned">
             <fieldset>
-              <label for="type">Тип заявки</label>
+              <div className="pure-control-group">
+              <label htmlFor="type">Тип заявки</label>
               <select id="type" selected={type} onSelect={e => this.handleSelect(e)} required>
                 <select name="send">Отправление</select>
                 <select name="receive">Получение</select>
                 <select name="repair">На ремонт</select>
               </select>
+              </div>
               <Modal isOpen={modalOpen}>
                 <Table showOwn={type!== 1} />
               </Modal>
-              <label for="receiver">Получатель</label>
+              <div className="pure-control-group">
+              <label htmlFor="receiver">Получатель</label>
               <select id="receiver" required>
-                {recipients.map(el => <option>el.name</option>)}
+            {/*{recipients.map(el => <option>el.name</option>)}*/}
               </select>
-              <label for="sender">Отправитель</label>
-              <input id="sender" value={user.filial} disabled />
-              <label for="pick-date">Дата получения</label>
+              </div>
+              <div className="pure-control-group">
+              <label htmlFor="sender">Отправитель</label>
+              <input id="sender" value={""} disabled />
+              </div>
+              <div className="pure-control-group">
+              <label htmlFor="pick-date">Дата получения</label>
               <DatePicker id="pick-date" onChange={this.handleChange} />
+              </div>
+              <div className="pure-controls">
               <button type="button" className="pure-button pure-button-primary" onClick={() => this.handlePress()}>
                 Войти
               </button>
+              </div>
             </fieldset>
           </form>
         </div>
@@ -99,4 +110,4 @@ const mapStateToProps = state => ({
   isLogged: state.auth.authenticated
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login })(Requests);
