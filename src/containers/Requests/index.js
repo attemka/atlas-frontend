@@ -9,6 +9,12 @@ import "./Requests.scss";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
 import Table from "../../components/Table/Table";
+import TextField from "material-ui/TextField";
+import RaisedButton from "material-ui/RaisedButton";
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import { Card } from "material-ui/Card";
+import Dialog from 'material-ui/Dialog';
 
 class Requests extends Component {
   static propTypes = {
@@ -39,68 +45,40 @@ class Requests extends Component {
     });
   };
 
+  modalSwitch = () => {
+    const option = this.state.modalOpen? false: true;
+    this.setState({modalOpen: option});
+  };
+
+  handleDropDownChange = (event, index, value) => this.setState({dropDownValue: value});
+
   handlePress = () => {
-    this.props
-      .login(this.state.email, this.state.password)
-      .then(response => {
-        this.setState({
-          email: "",
-          password: "",
-          loginFailed: false,
-          loginPassed: true
-        });
-      })
-      .catch(error => {
-        this.setState({
-          email: "",
-          password: "",
-          loginFailed: true
-        });
-      });
   };
 
   render() {
     let { type, modalOpen } = this.state;
     const { recipients, user } = this.props;
+    const cardStyle = {
+      display: "flex",
+      flexDirection: "column",
+      margin: "auto",
+    };
     return (
-      <div className="page-wrapper">
-        <div className="login-wrapper">
-          {this.state.loginPassed ? null : <Redirect to="/" />}
-          <form className="pure-form pure-form-aligned">
-            <fieldset>
-              <div className="pure-control-group">
-              <label htmlFor="type">Тип заявки</label>
-              <select id="type" selected={type} onSelect={e => this.handleSelect(e)} required>
-                <select name="send">Отправление</select>
-                <select name="receive">Получение</select>
-                <select name="repair">На ремонт</select>
-              </select>
-              </div>
-              <Modal isOpen={modalOpen}>
-                <Table showOwn={type!== 1} />
-              </Modal>
-              <div className="pure-control-group">
-              <label htmlFor="receiver">Получатель</label>
-              <select id="receiver" required>
-            {/*{recipients.map(el => <option>el.name</option>)}*/}
-              </select>
-              </div>
-              <div className="pure-control-group">
-              <label htmlFor="sender">Отправитель</label>
-              <input id="sender" value={""} disabled />
-              </div>
-              <div className="pure-control-group">
-              <label htmlFor="pick-date">Дата получения</label>
-              <DatePicker id="pick-date" onChange={this.handleChange} />
-              </div>
-              <div className="pure-controls">
-              <button type="button" className="pure-button pure-button-primary" onClick={() => this.handlePress()}>
-                Войти
-              </button>
-              </div>
-            </fieldset>
-          </form>
-        </div>
+      <div className="requests-wrapper">
+        <Card style={cardStyle}>
+          <DropDownMenu value={this.handleDropDownChange} onChange={this.handleDropDownChange}>
+            <MenuItem value="send" primaryText="Отправление"/>
+            <MenuItem value="recieve" primaryText="Получение"/>
+            <MenuItem value="repair" primaryText="На ремонт"/>
+          </DropDownMenu>
+          <RaisedButton label="Выбрать товары" onClick={this.modalSwitch}/>
+          <Modal
+          isOpen={modalOpen}
+          >
+            <Table showOwn={true}/>
+            <RaisedButton label="Подтвердить" onClick={this.modalSwitch}/>
+          </Modal>
+        </Card>
       </div>
     );
   }

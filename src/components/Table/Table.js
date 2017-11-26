@@ -4,16 +4,17 @@ import "react-table/react-table.css";
 import ReactTable from "react-table";
 import { connect } from "react-redux";
 import { getProducts } from "../../actions/ProductsActions";
+import moment from 'moment';
 
 class Table extends Component {
-
   componentWillMount = () => {
     const { getProducts, showOwn } = this.props;
-    getProducts({page: 1, page_size:20, show_own: showOwn });
+    getProducts({ page: 1, page_size: 20, show_own: showOwn });
   };
 
   render() {
-    console.log(this.props.products);
+    let merer= moment();
+    console.log(merer);
     return (
       <div className="table">
         <ReactTable
@@ -22,15 +23,19 @@ class Table extends Component {
           showPageSizeOptions={false}
           columns={[
             {
-              Header: "ID",
-              accessor: "id"
-            },
-            {
               Header: "Название",
               accessor: "title"
             },
             {
-              Header: "Год",
+              Header: "Номер",
+              accessor: "number"
+            },
+            {
+              Header: "Номер для заказа",
+              accessor: "number_for_order"
+            },
+            {
+              Header: "Год выпуска",
               accessor: "year"
             },
             {
@@ -39,7 +44,8 @@ class Table extends Component {
             },
             {
               Header: "Когда",
-              accessor: "location_update"
+              id: "UpdateDate",
+              accessor: data => moment(data.location_update).format("DD-MM-YYYY")
             },
             {
               Header: "Комментарий",

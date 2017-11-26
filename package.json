@@ -20,6 +20,7 @@
     "fetch-middleware-for-redux": "^1.0.1",
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
+    "material-ui": "^0.19.4",
     "moment": "^2.19.0",
     "node-sass": "^4.6.0",
     "path": "^0.12.7",
@@ -41,6 +42,8 @@
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
+    "eslint": "^4.11.0",
+    "eslint-plugin-react": "^7.5.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
     "sass-loader": "^6.0.6",
