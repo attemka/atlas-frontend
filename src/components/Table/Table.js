@@ -5,7 +5,7 @@ import ReactTable from "react-table";
 import { connect } from "react-redux";
 import { getProducts } from "../../actions/ProductsActions";
 import moment from 'moment';
-
+const CheckboxTable = checkboxHOC(ReactTable);
 class Table extends Component {
   componentWillMount = () => {
     const { getProducts, showOwn } = this.props;
@@ -13,11 +13,9 @@ class Table extends Component {
   };
 
   render() {
-    let merer= moment();
-    console.log(merer);
     return (
       <div className="table">
-        <ReactTable
+        <CheckboxTable
           data={this.props.products}
           manual
           showPageSizeOptions={false}

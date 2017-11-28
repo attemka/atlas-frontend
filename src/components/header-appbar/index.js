@@ -12,7 +12,7 @@ class HeaderAppbar extends Component {
   render() {
     const { isLogged, userName, isAdmin } = this.props;
 
-    const Login = () => <FlatButton label="Логин" />;
+    const Login = () => <FlatButton href="/login" label="Логин" />;
 
     const Logged = () => (
       <IconMenu

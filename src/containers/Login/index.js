@@ -23,7 +23,6 @@ class Login extends Component {
   }
 
   handleChange = e => {
-    console.log(e.target.name);
     let field = e.target.name === "E-mail" ? "email" : "password";
     let obj = {};
     obj[field] = e.target.value;
@@ -55,13 +54,12 @@ class Login extends Component {
     const style = {
       display: "flex",
       margin: "auto",
-      alignContent: "center",
-      alignSelf: "center",
       flexDirection: "column"
     };
 
     const fieldStyle = {
-      display: "block"
+      display: "block",
+        margin: '20px',
     };
 
     const slideDown = {
@@ -71,6 +69,7 @@ class Login extends Component {
 
     return (
       <div className="login-wrapper">
+          {this.state.loginPassed ? <Redirect to="/" /> : null}
         <Card style={style}>
           <TextField
             style={fieldStyle}

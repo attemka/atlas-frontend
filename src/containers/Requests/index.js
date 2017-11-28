@@ -46,7 +46,7 @@ class Requests extends Component {
   };
 
   modalSwitch = () => {
-    const option = this.state.modalOpen? false: true;
+    const option = !this.state.modalOpen;
     this.setState({modalOpen: option});
   };
 
