@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 import { login } from "../../actions/LoginActions";
@@ -11,10 +11,11 @@ import Modal from "react-modal";
 import SelectableTable from "../../components/Table/SelectableTable";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from "material-ui/DropDownMenu";
+import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
-import Dialog from 'material-ui/Dialog';
+import Checkbox from "material-ui/Checkbox";
+import Dialog from "material-ui/Dialog";
 
 class Requests extends Component {
   static propTypes = {
@@ -26,7 +27,9 @@ class Requests extends Component {
       loginFailed: false,
       loginPassed: this.props.isLogged,
       modalOpen: false,
-        selectedData: [],
+      customAddress: false,
+      dropDownValue: 0,
+      selectedData: []
     };
   }
 
@@ -48,38 +51,62 @@ class Requests extends Component {
 
   modalSwitch = () => {
     const option = !this.state.modalOpen;
-    this.setState({modalOpen: option});
+    this.setState({ modalOpen: option });
   };
 
-  handleDropDownChange = (event, index, value) => this.setState({dropDownValue: value});
+  handleDropDownChange = (event, index, value) => this.setState({ dropDownValue: value });
 
-    handleSelectChange = selection => {
-      this.setState({selectedData: selection})
-    };
+  handleSelectChange = selection => {
+    this.setState({ selectedData: selection });
+  };
 
-    render() {
-    let { type, modalOpen, selectedData } = this.state;
+  switchCheckbox = () => {
+    this.setState({customAddress: !this.state.customAddress});
+  };
+
+  render() {
+    let { type, modalOpen, selectedData, customAddress, dropDownValue } = this.state;
     const { recipients, user } = this.props;
-    const cardStyle = {
-      display: "flex",
-      flexDirection: "column",
-      margin: "auto",
+    const blockStyle={
+      display: "block",
+      margin: "10px",
     };
+
     return (
       <div className="requests-wrapper">
-        <Card style={cardStyle}>
-          <DropDownMenu value={this.handleDropDownChange} onChange={this.handleDropDownChange}>
-            <MenuItem value="send" primaryText="Отправление"/>
-            <MenuItem value="recieve" primaryText="Получение"/>
-            <MenuItem value="repair" primaryText="На ремонт"/>
+        <Modal className="table-modal" isOpen={modalOpen}>
+          <SelectableTable onSelectChange={this.handleSelectChange} selection={selectedData} showOwn={true} />
+          <div className="apply-btn" >
+          <RaisedButton label="Подтвердить" onClick={this.modalSwitch} />
+          </div>
+        </Modal>
+        <Card style="card-content">
+          <div className="row-item">
+            Тип Заказа:
+          <DropDownMenu value={dropDownValue} onChange={this.handleDropDownChange}>
+            <MenuItem value={0} primaryText="Отправление" />
+            <MenuItem value={1} primaryText="Получение" />
+            <MenuItem value={2} primaryText="На ремонт" />
           </DropDownMenu>
-          <RaisedButton label="Выбрать товары" onClick={this.modalSwitch}/>
-          <Modal
-          isOpen={modalOpen}
-          >
-            <SelectableTable onSelectChange={this.handleSelectChange} showOwn={true}/>
-            <RaisedButton label="Подтвердить" onClick={this.modalSwitch}/>
-          </Modal>
+            </div>
+          <div className="row-item" ><RaisedButton label="Выбрать товары" onClick={this.modalSwitch} />
+            {!!selectedData.length && <div className="selected-items">Выбрано {selectedData.length} инструментов</div>}
+          </div>
+          <div className="filial-addresses">
+          <TextField floatingLabelText="Отправитель" />
+          <TextField floatingLabelText="Получатель" />
+          </div>
+          <div className="checkbox-item"><Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.</div>
+          {customAddress && (
+            <div className="custom-address">
+              <TextField  floatingLabelText="Контактное имя" />
+              <TextField floatingLabelText="Телефон" />
+              <TextField floatingLabelText="Город" />
+              <TextField floatingLabelText="Улица" />
+              <TextField floatingLabelText="Дом" />
+              <TextField floatingLabelText="Индекс" />
+            </div>
+          )}
         </Card>
       </div>
     );
