@@ -1,119 +1,51 @@
-import React, { Component } from "react";
-import "./Table.scss";
-import "react-table/react-table.css";
-import ReactTable from "react-table";
-import { connect } from "react-redux";
-import { getProducts } from "../../actions/ProductsActions";
-import moment from "moment";
-import checkboxHOC from "./checkboxHOC";
+import React, { Component } from 'react';
+import './Table.scss';
+import 'react-table/react-table.css';
+import ReactTable from 'react-table';
+import { connect } from 'react-redux';
+import { getProducts } from '../../actions/ProductsActions';
+import moment from 'moment';
+import { columns } from './SelectableTable'
 
-const CheckboxTable = checkboxHOC(ReactTable);
-const columns = [
-  {
-    Header: "Название",
-    accessor: "title"
-  },
-  {
-    Header: "Номер",
-    accessor: "number"
-  },
-  {
-    Header: "Номер для заказа",
-    accessor: "number_for_order"
-  },
-  {
-    Header: "Год выпуска",
-    accessor: "year"
-  },
-  {
-    Header: "Ответственный",
-    accessor: "responsible_text"
-  },
-  {
-    Header: "Когда",
-    id: "UpdateDate",
-    accessor: data => moment(data.location_update).format("DD-MM-YYYY")
-  },
-  {
-    Header: "Комментарий",
-    accessor: "comment"
-  }
-];
+
 
 class Table extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: [],
-      columns: [],
-      selection: [],
-      selectAll: false
-    };
-  }
-  componentWillMount() {
-    const { getProducts, showOwn } = this.props;
-    getProducts({ page: 1, page_size: 20, show_own: showOwn }).then(result => {
-      //console.log('data', result.data.data.results);
-      this.setState({ data: result.data.data.results });
-    });
-  }
-
-  toggleSelection = (key, shift, row) => {
-    let selection = [...this.state.selection];
-    const keyIndex = selection.indexOf(key);
-    if (keyIndex >= 0) {
-      selection = [...selection.slice(0, keyIndex), ...selection.slice(keyIndex + 1)];
-    } else {
-      selection.push(key);
+    constructor() {
+        super();
+        this.state = {
+            data: [],
+            columns: [],
+        };
     }
-    this.setState({ selection });
-  };
-
-  isSelected = key => {
-    return this.state.selection.includes(key);
-  };
-
-  toggleAll = () => {
-    const selectAll = this.state.selectAll ? false : true;
-    const selection = [];
-    if (selectAll) {
-      const wrappedInstance = this.checkboxTable.getWrappedInstance();
-      const currentRecords = wrappedInstance.getResolvedState().sortedData;
-      currentRecords.forEach(item => {
-        selection.push(item._original._id);
-      });
+    componentWillMount() {
+        const { getProducts, showOwn } = this.props;
+        getProducts({
+            page: 1,
+            page_size: 20,
+            show_own: showOwn,
+        }).then(result => {
+            this.setState({ data: result.data.data.results });
+        });
     }
-    this.setState({ selectAll, selection });
-  };
+    testfunc = () => console.log('works');
 
-  render() {
-    const { toggleSelection, toggleAll, isSelected } = this;
-    const { data, selectAll } = this.state;
-    console.log(data);
-
-    const checkboxProps = {
-      selectAll,
-      isSelected,
-      toggleSelection,
-      toggleAll
-    };
-    return (
-      <div className="table">
-        <CheckboxTable
-          ref={r => (this.checkboxTable = r)}
-          data={data}
-          manual
-          showPageSizeOptions={false}
-          columns={columns}
-          {...checkboxProps}
-        />
-      </div>
-    );
-  }
+    render() {
+        const { data } = this.state;
+        return (
+            <div className="table">
+                <ReactTable
+                    data={data}
+                    manual
+                    showPageSizeOptions={false}
+                    columns={columns}
+                />
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = state => ({
-  products: state.products.productsList
+    products: state.products.productsList,
 });
 
 export default connect(mapStateToProps, { getProducts })(Table);

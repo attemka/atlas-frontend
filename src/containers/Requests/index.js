@@ -8,7 +8,7 @@ import { login } from "../../actions/LoginActions";
 import "./Requests.scss";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
-import Table from "../../components/Table/Table";
+import SelectableTable from "../../components/Table/SelectableTable";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -26,6 +26,7 @@ class Requests extends Component {
       loginFailed: false,
       loginPassed: this.props.isLogged,
       modalOpen: false,
+        selectedData: [],
     };
   }
 
@@ -52,11 +53,12 @@ class Requests extends Component {
 
   handleDropDownChange = (event, index, value) => this.setState({dropDownValue: value});
 
-  handlePress = () => {
-  };
+    handleSelectChange = selection => {
+      this.setState({selectedData: selection})
+    };
 
-  render() {
-    let { type, modalOpen } = this.state;
+    render() {
+    let { type, modalOpen, selectedData } = this.state;
     const { recipients, user } = this.props;
     const cardStyle = {
       display: "flex",
@@ -75,7 +77,7 @@ class Requests extends Component {
           <Modal
           isOpen={modalOpen}
           >
-            <Table showOwn={true}/>
+            <SelectableTable onSelectChange={this.handleSelectChange} showOwn={true}/>
             <RaisedButton label="Подтвердить" onClick={this.modalSwitch}/>
           </Modal>
         </Card>

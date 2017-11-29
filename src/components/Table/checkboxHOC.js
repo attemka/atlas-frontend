@@ -73,7 +73,7 @@ export default Component => {
 
   wrapper.displayName = "RTCheckboxTable";
   wrapper.defaultProps = {
-    keyField: "_id",
+    keyField: "id",
     isSelected: key => {
       console.log("No isSelected handler provided:", { key });
     },
