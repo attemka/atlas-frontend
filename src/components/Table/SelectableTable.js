@@ -39,8 +39,10 @@ export const columns = [
         accessor: 'comment',
     },
 ];
-
-class SelectableTable extends Component {
+const tableStyle ={
+    backgroundColor:'rgba(255,255,255,1)',
+};
+    class SelectableTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -106,8 +108,8 @@ class SelectableTable extends Component {
             toggleAll,
         };
         return (
-            <div className="selectable-table">
                 <CheckboxTable
+                    style={tableStyle}
                     ref={r => (this.checkboxTable = r)}
                     data={data}
                     manual
@@ -115,7 +117,6 @@ class SelectableTable extends Component {
                     columns={columns}
                     {...checkboxProps}
                 />
-            </div>
         );
     }
 }

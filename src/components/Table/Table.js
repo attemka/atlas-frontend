@@ -32,14 +32,12 @@ class Table extends Component {
     render() {
         const { data } = this.state;
         return (
-            <div className="table">
                 <ReactTable
                     data={data}
                     manual
                     showPageSizeOptions={false}
                     columns={columns}
                 />
-            </div>
         );
     }
 }

@@ -60,6 +60,10 @@ class Requests extends Component {
     this.setState({ selectedData: selection });
   };
 
+  onSelectConfirm = () =>{
+    this.modalSwitch();
+  };
+
   switchCheckbox = () => {
     this.setState({customAddress: !this.state.customAddress});
   };
@@ -71,15 +75,14 @@ class Requests extends Component {
       display: "block",
       margin: "10px",
     };
+    const modalStyle={
+      overlay:{
+        backgroundColor: 'rgba(255, 0, 0, 0.9)',
+      }
+      };
 
     return (
       <div className="requests-wrapper">
-        <Modal className="table-modal" isOpen={modalOpen}>
-          <SelectableTable onSelectChange={this.handleSelectChange} selection={selectedData} showOwn={true} />
-          <div className="apply-btn" >
-          <RaisedButton label="Подтвердить" onClick={this.modalSwitch} />
-          </div>
-        </Modal>
         <Card style="card-content">
           <div className="row-item">
             Тип Заказа:
@@ -92,6 +95,12 @@ class Requests extends Component {
           <div className="row-item" ><RaisedButton label="Выбрать товары" onClick={this.modalSwitch} />
             {!!selectedData.length && <div className="selected-items">Выбрано {selectedData.length} инструментов</div>}
           </div>
+            <Modal className="table-modal" isOpen={modalOpen} styles={modalStyle}>
+                <SelectableTable className="requests-table" onSelectChange={this.handleSelectChange} selection={selectedData} showOwn={true} />
+                <div className="apply-btn" >
+                    <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
+                </div>
+            </Modal>
           <div className="filial-addresses">
           <TextField floatingLabelText="Отправитель" />
           <TextField floatingLabelText="Получатель" />

@@ -8,6 +8,7 @@
 }
 
 .ReactModal__Overlay {
+  margin-top: 5%;
   z-index: 1000;
 }
 .apply-btn{
@@ -16,6 +17,9 @@
   justify-content: center;
 }
 
+.requests-table{
+  background-color: rgba(255,0,0,0.9);
+}
 .card-content {
 }
 .row-item {

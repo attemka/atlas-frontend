@@ -4,7 +4,7 @@ const initialState = {
 };
 
 export default {
-    entry: '~products',
+    entry: '~requests',
     skipFormat: true,
     initialState,
     reducer(state, action) {
