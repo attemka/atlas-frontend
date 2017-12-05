@@ -16,7 +16,8 @@ import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
 import Checkbox from "material-ui/Checkbox";
 import Dialog from "material-ui/Dialog";
-import { checkRequest } from "../../actions/RequestsActions";
+import { checkRequest, getAccountById } from "../../actions/RequestsActions";
+import api from "../../api";
 
 class Requests extends Component {
   static propTypes = {
@@ -28,10 +29,16 @@ class Requests extends Component {
       loginFailed: false,
       loginPassed: this.props.isLogged,
       modalOpen: false,
+      senderValue: "",
+      recieverValue: "",
       customAddress: false,
       dropDownValue: 0,
       selectedData: []
     };
+  }
+
+  componentWillMount() {
+    this.props.loadProfile();
   }
 
   handleChange = date => {
@@ -55,7 +62,24 @@ class Requests extends Component {
     this.setState({ modalOpen: option });
   };
 
-  handleDropDownChange = (event, index, value) => this.setState({ dropDownValue: value });
+  handleDropDownChange = (event, index, value) =>{
+    const {account, avaliableAccounts} = this.props;
+    const {recieverValue} = this.state;
+
+    const selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
+
+    this.setState({
+      dropDownValue: value,
+      contactName: value === 0 ? account.contact_name : selectedAccount.contact_name,
+      contactPhone: value === 0 ? account.contact_phone : selectedAccount.contact_phone,
+      contactCity: value === 0 ? account.city : selectedAccount.city,
+      contactStreet: value === 0 ? account.street: selectedAccount.street,
+      contactBuilding: value === 0 ? account.house : selectedAccount.house,
+      contactZip: value === 0 ? account.zip : selectedAccount.zip
+    })
+  };
+
+  handleRecieverChange = (event, index, value) => this.setState({recieverValue: value});
 
   handleSelectChange = selection => {
     this.setState({ selectedData: selection });
@@ -64,7 +88,16 @@ class Requests extends Component {
   onSelectConfirm = () => {
     const { dropDownValue, selectedData } = this.state;
     this.modalSwitch();
-    this.props.checkRequest(selectedData, dropDownValue).then(response => console.log(response));
+    this.props
+      .checkRequest(selectedData, dropDownValue)
+      .then(response => Promise.all(response.data.data.from_account.map(account => this.props.getAccountById(account))))
+      .then(responses => {
+        console.log("res", responses);
+        let senders = "";
+        responses.forEach(el => (senders += `${el.data.data.name}, `));
+        senders = senders.slice(0, -2);
+        this.setState({ senderValue: senders });
+      });
   };
 
   switchCheckbox = () => {
@@ -72,8 +105,21 @@ class Requests extends Component {
   };
 
   render() {
-    let { type, modalOpen, selectedData, customAddress, dropDownValue } = this.state;
-    const { recipients, user } = this.props;
+    const {
+      modalOpen,
+      selectedData,
+      customAddress,
+      dropDownValue,
+      avaliableAccounts,
+      recieverValue,
+      contactName,
+      contactPhone,
+      contactCity,
+      contactStreet,
+      contactBuilding,
+      contactZip
+    } = this.state;
+    const { recipients, account } = this.props;
     const blockStyle = {
       display: "block",
       margin: "10px"
@@ -111,8 +157,19 @@ class Requests extends Component {
             </div>
           </Modal>
           <div className="row-item">
-            <TextField className="input-field" floatingLabelText="Отправитель" />
-            <TextField className="input-field" floatingLabelText="Получатель" />
+            <TextField
+              className="input-field"
+              disabled
+              value={dropDownValue === 1 ? this.state.senderValue : account.name}
+              floatingLabelText="Отправитель"
+            />
+            {dropDownValue === 1 ? (
+              <TextField className="input-field" disabled value={account.name} floatingLabelText="Получатель" />
+            ) : (
+              <DropDownMenu value={recieverValue} onChange={this.handleRecieverChange}>
+                {avaliableAccounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
+              </DropDownMenu>
+            )}
           </div>
           <div className="checkbox-item">
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
@@ -120,16 +177,16 @@ class Requests extends Component {
           {customAddress && (
             <div className="custom-address">
               <div className="row-item">
-                <TextField className="input-field" floatingLabelText="Контактное имя" />
-                <TextField className="input-field" floatingLabelText="Телефон" />
+                <TextField className="input-field" defaultValue={contactName} floatingLabelText="Контактное имя" />
+                <TextField className="input-field" defaultValue={contactPhone} floatingLabelText="Телефон" />
               </div>
               <div className="row-item">
-                <TextField className="input-field" floatingLabelText="Город" />
-                <TextField className="input-field" floatingLabelText="Улица" />
+                <TextField className="input-field" defaultValue={contactCity} floatingLabelText="Город" />
+                <TextField className="input-field" defaultValue={contactStreet} floatingLabelText="Улица" />
               </div>
               <div className="row-item">
-                <TextField className="input-field" floatingLabelText="Дом" />
-                <TextField className="input-field" floatingLabelText="Индекс" />
+                <TextField className="input-field" defaultValue={contactBuilding} floatingLabelText="Дом" />
+                <TextField className="input-field" defaultValue={contactZip} floatingLabelText="Индекс" />
               </div>
             </div>
           )}
@@ -140,7 +197,10 @@ class Requests extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLogged: state.auth.authenticated
+  isLogged: state.auth.authenticated,
+  account: state["profile"].profileData.account
 });
 
-export default connect(mapStateToProps, { checkRequest })(Requests);
+export default connect(mapStateToProps, { checkRequest, getAccountById, loadProfile: api.actions.profile.index })(
+  Requests
+);

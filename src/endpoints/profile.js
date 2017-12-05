@@ -1,21 +1,24 @@
-import { actionTypesFor } from 'trivial-redux';
+import { actionTypesFor } from "trivial-redux";
 
 const initialState = {
-    profileData: {},
-    fetching: false,
+  profileData: {},
+  fetching: false
 };
 
 export default {
-    entry: 'users/profile',
-    skipFormat: true,
-    initialState: initialState,
-    reducer(state, action) {
-        const authActions = actionTypesFor('create', 'auth');
-        switch (action.type) {
-            case authActions.success:
-                return { ...state, profileData: action.payload };
-            default:
-                return state;
-        }
-    },
+  entry: "~user/profile",
+  skipFormat: true,
+  initialState: initialState,
+  reducer(state, action) {
+    const authActions = actionTypesFor("create", "auth");
+    switch (action.type) {
+    case authActions.success:
+      return { ...state, profileData: action.payload };
+    case this.types.index.success:
+      return { ...state, profileData: action.payload };
+
+    default:
+      return state;
+    }
+  }
 };

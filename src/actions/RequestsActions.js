@@ -15,3 +15,16 @@ export function checkRequest(tools, type) {
     }
   };
 }
+
+export function getAccountById(id) {
+  return {
+    types: actionTypesFor("index", "requests"),
+    meta: {
+      fetch: {
+        url: `~user/account/${id}`,
+        method: "GET"
+      }
+    }
+  };
+}
+
