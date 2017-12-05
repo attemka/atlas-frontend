@@ -12,6 +12,7 @@ import SelectableTable from "../../components/Table/SelectableTable";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import DropDownMenu from "material-ui/DropDownMenu";
+import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
 import Checkbox from "material-ui/Checkbox";
@@ -30,7 +31,8 @@ class Requests extends Component {
       loginPassed: this.props.isLogged,
       modalOpen: false,
       senderValue: "",
-      recieverValue: "",
+        avaliableAccounts:[],
+      recieverValue: 0,
       customAddress: false,
       dropDownValue: 0,
       selectedData: []
@@ -39,6 +41,8 @@ class Requests extends Component {
 
   componentWillMount() {
     this.props.loadProfile();
+      this.props.getAccountById('all').then(response => this.setState({avaliableAccounts: response.data.data }));
+
   }
 
   handleChange = date => {
@@ -63,19 +67,20 @@ class Requests extends Component {
   };
 
   handleDropDownChange = (event, index, value) =>{
-    const {account, avaliableAccounts} = this.props;
-    const {recieverValue} = this.state;
+    const {account} = this.props;
+    const {recieverValue, avaliableAccounts} = this.state;
 
+    this.setState({dropDownValue: value});
+    if (value === 1)
     const selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
-
-    this.setState({
-      dropDownValue: value,
-      contactName: value === 0 ? account.contact_name : selectedAccount.contact_name,
-      contactPhone: value === 0 ? account.contact_phone : selectedAccount.contact_phone,
-      contactCity: value === 0 ? account.city : selectedAccount.city,
-      contactStreet: value === 0 ? account.street: selectedAccount.street,
-      contactBuilding: value === 0 ? account.house : selectedAccount.house,
-      contactZip: value === 0 ? account.zip : selectedAccount.zip
+    console.log(selectedAccount);
+   selectedAccount && account && this.setState({
+      contactName: value === 0 ? account.contact_name || '' : selectedAccount.contact_name || '',
+      contactPhone: value === 0 ? account.contact_phone || '': selectedAccount.contact_phone || '',
+      contactCity: value === 0 ? account.city || '' : selectedAccount.city || '',
+      contactStreet: value === 0 ? account.street || '' : selectedAccount.street || '',
+      contactBuilding: value === 0 ? account.house || '' : selectedAccount.house || '',
+      contactZip: value === 0 ? account.zip  || '' : selectedAccount.zip || ''
     })
   };
 
@@ -166,9 +171,9 @@ class Requests extends Component {
             {dropDownValue === 1 ? (
               <TextField className="input-field" disabled value={account.name} floatingLabelText="Получатель" />
             ) : (
-              <DropDownMenu value={recieverValue} onChange={this.handleRecieverChange}>
+              <SelectField className="select-field" floatingLabelText="Получатель" value={recieverValue} onChange={this.handleRecieverChange}>
                 {avaliableAccounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
-              </DropDownMenu>
+              </SelectField>
             )}
           </div>
           <div className="checkbox-item">
