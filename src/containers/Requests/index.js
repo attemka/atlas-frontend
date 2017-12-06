@@ -17,8 +17,22 @@ import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
 import Checkbox from "material-ui/Checkbox";
 import Dialog from "material-ui/Dialog";
-import { checkRequest, getAccountById } from "../../actions/RequestsActions";
+import { checkRequest, getAccountById, getAllAccounts } from "../../actions/RequestsActions";
 import api from "../../api";
+import _ from 'lodash'
+
+const SEND_TYPE = 1
+const RECIEVE_TYPE = 0
+const ON_REPAIR = 2
+
+const nullAddressObject = {
+    contact_name: null,
+    contact_phone: null,
+    city: null,
+    street: null,
+    house: null,
+    zip: null
+}
 
 class Requests extends Component {
   static propTypes = {
@@ -27,12 +41,9 @@ class Requests extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loginFailed: false,
-      loginPassed: this.props.isLogged,
       modalOpen: false,
       senderValue: "",
-      avaliableAccounts: [],
-      recieverValue: 1,
+      receiverAccountId: 0,
       customAddress: false,
       dropDownValue: 0,
       selectedData: []
@@ -42,25 +53,11 @@ class Requests extends Component {
   componentWillMount() {
     const { account } = this.props;
     this.props.loadProfile();
-    this.props
-      .getAccountById("all")
-      .then(response => this.setState({ avaliableAccounts: response.data.data, recieverAccount: account }));
+    this.props.getAllAccounts()
   }
 
   handleChange = date => {
     this.setState({ date });
-  };
-
-  handleSelect = e => {
-    const types = {
-      send: 0,
-      receive: 1,
-      repair: 2
-    };
-
-    this.setState({
-      type: types[e.target.name]
-    });
   };
 
   modalSwitch = () => {
@@ -68,27 +65,53 @@ class Requests extends Component {
     this.setState({ modalOpen: option });
   };
 
-  handleDropDownChange = (event, index, value) => {
-    const { account } = this.props;
-    const { recieverValue, avaliableAccounts, recieverAccount, senderAccount } = this.state;
-    console.log("reciever", recieverValue);
-    console.log(avaliableAccounts.filter(account => account.id === recieverValue)[0]);
-    let selectedAccount = {};
-    this.setState({ dropDownValue: value });
-    if (value === 1) selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
-    const newRecieverAccount = value === 0 ? account : selectedAccount;
+  handleDropDownChange = (event, index, dropDownValue) => {
+    console.log(event, index, dropDownValue)
+    if (dropDownValue === this.state.dropDownValue) return
     this.setState({
-      recieverAccount: newRecieverAccount,
-      contact_name: newRecieverAccount.address.contact_name,
-      contact_phone: newRecieverAccount.address.contact_phone,
-      city: newRecieverAccount.address.city,
-      street: newRecieverAccount.address.street,
-      house: newRecieverAccount.address.house,
-      zip: newRecieverAccount.address.zip
-    });
+      ...this.state,
+      dropDownValue,
+      ...nullAddressObject
+    })
+    // const { account } = this.props;
+    // const { recieverValue, avaliableAccounts, senderAccount } = this.state;
+    // console.log("reciever", recieverValue);
+    // console.log(avaliableAccounts.find(account => account.id === recieverValue));
+    // let selectedAccount = {};
+    // this.setState({ dropDownValue: value });
+    // if (value === 1) selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
+    // const newRecieverAccount = value === 0 ? account : selectedAccount;
+    // this.setState({
+    //   recieverAccount: newRecieverAccount,
+    //   contact_name: newRecieverAccount.address.contact_name,
+    //   contact_phone: newRecieverAccount.address.contact_phone,
+    //   city: newRecieverAccount.address.city,
+    //   street: newRecieverAccount.address.street,
+    //   house: newRecieverAccount.address.house,
+    //   zip: newRecieverAccount.address.zip
+    // });
   };
 
-  handleRecieverChange = (event, index, value) => this.setState({ recieverValue: value });
+  extractValue = (field) => {
+    return this.state[field] || this.extractDefaultValue(field)
+  }
+
+  extractDefaultValue = (field) => {
+    if(this.state.dropDownValue === RECIEVE_TYPE){
+      const ownAddress = this.props.currentAccount.address || {}
+      return ownAddress[field] || ''
+    }
+    else {
+      const receiverAccount = this.props.accounts.find( acc => acc.id === this.state.receiverAccountId) || {}
+      const address = receiverAccount.address || {}
+      return address[field] || ''
+    }
+  }
+
+  handleRecieverChange = (event, index, value) => this.setState({
+    ...this.state,
+    receiverAccountId: value
+  });
 
   handleSelectChange = selection => {
     this.setState({ selectedData: selection });
@@ -97,26 +120,51 @@ class Requests extends Component {
   onSelectConfirm = () => {
     const { dropDownValue, selectedData } = this.state;
     this.modalSwitch();
-    this.props
-      .checkRequest(selectedData, dropDownValue)
-      .then(response => Promise.all(response.data.data.from_account.map(account => this.props.getAccountById(account))))
-      .then(responses => {
-        console.log("res", responses);
-        let senders = "";
-        responses.forEach(el => (senders += `${el.data.data.name}, `));
-        senders = senders.slice(0, -2);
-        this.setState({ senderValue: senders });
-      });
+    this.props.checkRequest(selectedData, dropDownValue)
   };
 
   switchCheckbox = () => {
-    this.setState({ customAddress: !this.state.customAddress });
+    this.setState({ ...this.state, customAddress: !this.state.customAddress, ...nullAddressObject });
   };
 
-  handleAddressChange = (name, value) => {
-    console.log(name, value);
-    this.setState({ [name]: value });
-  };
+  handleAddressChange = (name, value) => this.setState({ [name]: value });
+
+  buildSenderPresentation = () => {
+    const result = _.reduce(this.props.requestInfo.fromAccount, (strRes, accountId) => {
+      const account = this.props.accounts.find( acc => acc.id === accountId)
+      return strRes + `${account.name}, `
+    }, '')
+    return result.slice(0, -2)
+  }
+
+  buildTextFieldProps = (entity, text)=> {
+    return {
+      className: "input-field",
+      value: this.extractValue(entity),
+      name: entity,
+      onChange: e => this.handleAddressChange(e.target.name, e.target.value),
+      floatinLabelText: text
+    }
+  }
+
+  renderTextFields = () => {
+    return (
+      <div className="custom-address">
+        <div className="row-item">
+          <TextField {...this.buildTextFieldProps("contact_name", "Контактное имя")}/>
+          <TextField {...this.buildTextFieldProps("contact_phone", "Контактный телефон")}/>
+        </div>
+        <div className="row-item">
+          <TextField {...this.buildTextFieldProps("city", "Город")}/>
+          <TextField {...this.buildTextFieldProps("street", "Улица")}/>
+        </div>
+        <div className="row-item">
+          <TextField {...this.buildTextFieldProps("house", "Дом")}/>
+          <TextField {...this.buildTextFieldProps("zip", "Индекс")}/>
+        </div>
+      </div>
+    )
+  }
 
   render() {
     const {
@@ -124,24 +172,16 @@ class Requests extends Component {
       selectedData,
       customAddress,
       dropDownValue,
-      avaliableAccounts,
-      recieverValue,
-      recieverAccount,
-      contact_name,
-      contact_phone,
-      city,
-      street,
-      house,
-      zip
+      receiverAccountId,
     } = this.state;
-    const { recipients, account } = this.props;
+    const { currentAccount } = this.props;
     const blockStyle = {
       display: "block",
       margin: "10px"
     };
     const modalStyle = {
       overlay: {
-        backgroundColor: "rgba(255, 0, 0, 0.9)"
+        backgroundColor: "rgba(255, 0, 0, 0.9)",
       }
     };
 
@@ -165,7 +205,7 @@ class Requests extends Component {
               className="requests-table"
               onSelectChange={this.handleSelectChange}
               selection={selectedData}
-              showOwn={dropDownValue !== 0}
+              showOwn={dropDownValue !== RECIEVE_TYPE}
             />
             <div className="apply-btn">
               <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
@@ -175,83 +215,26 @@ class Requests extends Component {
             <TextField
               className="input-field"
               disabled
-              value={dropDownValue === 0 ? this.state.senderValue : account.name}
+              value={dropDownValue === RECIEVE_TYPE ? this.buildSenderPresentation(): currentAccount.name}
               floatingLabelText="Отправитель"
             />
-            {dropDownValue === 0 ? (
-              <TextField className="input-field" disabled value={account.name} floatingLabelText="Получатель" />
+            {dropDownValue === RECIEVE_TYPE ? (
+              <TextField className="input-field" disabled value={currentAccount.name} floatingLabelText="Получатель" />
             ) : (
               <SelectField
                 className="select-field"
                 floatingLabelText="Получатель"
-                value={recieverValue}
+                value={receiverAccountId}
                 onChange={this.handleRecieverChange}
               >
-                {avaliableAccounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
+                {this.props.accounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
               </SelectField>
             )}
           </div>
           <div className="checkbox-item">
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
           </div>
-          {customAddress && (
-            <div className="custom-address">
-              <div className="row-item">
-                <TextField
-                  className="input-field"
-                  value={contact_name}
-                  defaultValue={recieverAccount.address.contact_name}
-                  name="contact_name"
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Контактное имя"
-                />
-                <TextField
-                  className="input-field"
-                  value={contact_phone}
-                  name="contact_phone"
-                  defaultValue={recieverAccount.address.contact_phone}
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Телефон"
-                />
-              </div>
-              <div className="row-item">
-                <TextField
-                  className="input-field"
-                  value={city}
-                  defaultValue={recieverAccount.address.city}
-                  name="city"
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Город"
-                />
-                <TextField
-                  className="input-field"
-                  value={street}
-                  defaultValue={recieverAccount.address.street}
-                  name="street"
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Улица"
-                />
-              </div>
-              <div className="row-item">
-                <TextField
-                  className="input-field"
-                  value={house}
-                  defaultValue={recieverAccount.address.house}
-                  name="house"
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Дом"
-                />
-                <TextField
-                  className="input-field"
-                  value={zip}
-                  defaultValue={recieverAccount.address.zip}
-                  name="zip"
-                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
-                  floatingLabelText="Индекс"
-                />
-              </div>
-            </div>
-          )}
+          {customAddress && this.renderTextFields()}
         </Card>
       </div>
     );
@@ -260,9 +243,16 @@ class Requests extends Component {
 
 const mapStateToProps = state => ({
   isLogged: state.auth.authenticated,
-  account: state["profile"].profileData.account
+  currentAccount: state.profile.profileData.account,
+  accounts: state.accounts.accountList,
+  requestInfo: state.requests.currentRequestMetaInfo
 });
 
-export default connect(mapStateToProps, { checkRequest, getAccountById, loadProfile: api.actions.profile.index })(
-  Requests
-);
+const mapDispatchToProps = {
+  checkRequest,
+  getAccountById,
+  getAllAccounts,
+  loadProfile: api.actions.profile.index
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Requests);

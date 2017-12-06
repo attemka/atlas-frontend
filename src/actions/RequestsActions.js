@@ -2,7 +2,7 @@ import { actionTypesFor } from "trivial-redux";
 
 export function checkRequest(tools, type) {
   return {
-    types: actionTypesFor("index", "requests"),
+    types: actionTypesFor("show", "requests"),
     meta: {
       fetch: {
         url: "~products/check_invoice",
@@ -18,7 +18,7 @@ export function checkRequest(tools, type) {
 
 export function getAccountById(id) {
   return {
-    types: actionTypesFor("index", "requests"),
+    types: actionTypesFor("show", "account"),
     meta: {
       fetch: {
         url: `~user/account/${id}`,
@@ -28,3 +28,13 @@ export function getAccountById(id) {
   };
 }
 
+export function getAllAccounts(){
+  return {
+    types: actionTypesFor("index", "accounts"),
+    meta: {
+      fetch: {
+        url: `~user/account/all`
+      }
+    }
+  }
+}
