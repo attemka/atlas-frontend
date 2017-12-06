@@ -147,6 +147,45 @@ class Requests extends Component {
     )
   }
 
+  renderTable = () => {
+    const {dropDownValue, selectedData} = this.state
+    return (
+      <div>
+        <SelectableTable
+          className="requests-table"
+          onSelectChange={this.handleSelectChange}
+          selection={selectedData}
+          showOwn={dropDownValue !== RECIEVE_TYPE}
+        />
+        <div className="apply-btn">
+          <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
+        </div>
+      </div>
+    )
+  }
+
+  renderRecieverField = () => {
+    switch(this.state.dropDownValue){
+      case RECIEVE_TYPE:
+        return <TextField className="input-field" disabled value={this.props.currentAccount.name}
+                floatingLabelText="Получатель" />
+      case SEND_TYPE:
+        return (
+          <SelectField className="select-field"
+                       floatingLabelText="Получатель"
+                       value={this.state.receiverAccountId}
+                       onChange={this.handleRecieverChange}>
+          {this.props.accounts.map(account => <MenuItem key={account.id} value={account.id}
+           primaryText={account.name} />)}
+        </SelectField>
+        )
+      case ON_REPAIR:
+        const adminAccount = this.props.accounts.find( acc => acc.is_admin) || {}
+        return <TextField className="input-field" disabled value={adminAccount.name || 'Москва'}
+                floatingLabelText="Получатель" />
+    }
+  }
+
   render() {
     const {
       modalOpen,
@@ -166,6 +205,7 @@ class Requests extends Component {
       }
     };
 
+    if(modalOpen) return this.renderTable()
     return (
       <div className="requests-wrapper">
         <Card style="card-content">
@@ -174,24 +214,13 @@ class Requests extends Component {
             <DropDownMenu value={dropDownValue} onChange={this.handleDropDownChange}>
               <MenuItem value={0} primaryText="Получение" />
               <MenuItem value={1} primaryText="Отправление" />
-              <MenuItem value={2} primaryText="На ремонт" />
+              {!currentAccount.is_admin ? <MenuItem value={2} primaryText="На ремонт" /> : null }
             </DropDownMenu>
           </div>
           <div className="column-item">
             <RaisedButton label="Выбрать товары" onClick={this.modalSwitch} />
             {!!selectedData.length && <div className="selected-items">Выбрано {selectedData.length} инструментов</div>}
           </div>
-          <Modal className="table-modal" isOpen={modalOpen} styles={modalStyle}>
-            <SelectableTable
-              className="requests-table"
-              onSelectChange={this.handleSelectChange}
-              selection={selectedData}
-              showOwn={dropDownValue !== RECIEVE_TYPE}
-            />
-            <div className="apply-btn">
-              <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
-            </div>
-          </Modal>
           <div className="row-item">
             <TextField
               className="input-field"
@@ -199,18 +228,7 @@ class Requests extends Component {
               value={dropDownValue === RECIEVE_TYPE ? this.buildSenderPresentation(): currentAccount.name}
               floatingLabelText="Отправитель"
             />
-            {dropDownValue === RECIEVE_TYPE ? (
-              <TextField className="input-field" disabled value={currentAccount.name} floatingLabelText="Получатель" />
-            ) : (
-              <SelectField
-                className="select-field"
-                floatingLabelText="Получатель"
-                value={receiverAccountId}
-                onChange={this.handleRecieverChange}
-              >
-                {this.props.accounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
-              </SelectField>
-            )}
+            {this.renderRecieverField()}
           </div>
           <div className="checkbox-item">
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
