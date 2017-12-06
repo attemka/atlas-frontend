@@ -42,7 +42,6 @@ class Requests extends Component {
     super(props);
     this.state = {
       modalOpen: false,
-      senderValue: "",
       receiverAccountId: 0,
       customAddress: false,
       dropDownValue: 0,
@@ -66,30 +65,12 @@ class Requests extends Component {
   };
 
   handleDropDownChange = (event, index, dropDownValue) => {
-    console.log(event, index, dropDownValue)
     if (dropDownValue === this.state.dropDownValue) return
     this.setState({
       ...this.state,
       dropDownValue,
       ...nullAddressObject
     })
-    // const { account } = this.props;
-    // const { recieverValue, avaliableAccounts, senderAccount } = this.state;
-    // console.log("reciever", recieverValue);
-    // console.log(avaliableAccounts.find(account => account.id === recieverValue));
-    // let selectedAccount = {};
-    // this.setState({ dropDownValue: value });
-    // if (value === 1) selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
-    // const newRecieverAccount = value === 0 ? account : selectedAccount;
-    // this.setState({
-    //   recieverAccount: newRecieverAccount,
-    //   contact_name: newRecieverAccount.address.contact_name,
-    //   contact_phone: newRecieverAccount.address.contact_phone,
-    //   city: newRecieverAccount.address.city,
-    //   street: newRecieverAccount.address.street,
-    //   house: newRecieverAccount.address.house,
-    //   zip: newRecieverAccount.address.zip
-    // });
   };
 
   extractValue = (field) => {
