@@ -31,8 +31,8 @@ class Requests extends Component {
       loginPassed: this.props.isLogged,
       modalOpen: false,
       senderValue: "",
-        avaliableAccounts:[],
-      recieverValue: 0,
+      avaliableAccounts: [],
+      recieverValue: 1,
       customAddress: false,
       dropDownValue: 0,
       selectedData: []
@@ -40,9 +40,11 @@ class Requests extends Component {
   }
 
   componentWillMount() {
+    const { account } = this.props;
     this.props.loadProfile();
-      this.props.getAccountById('all').then(response => this.setState({avaliableAccounts: response.data.data }));
-
+    this.props
+      .getAccountById("all")
+      .then(response => this.setState({ avaliableAccounts: response.data.data, recieverAccount: account }));
   }
 
   handleChange = date => {
@@ -66,25 +68,27 @@ class Requests extends Component {
     this.setState({ modalOpen: option });
   };
 
-  handleDropDownChange = (event, index, value) =>{
-    const {account} = this.props;
-    const {recieverValue, avaliableAccounts} = this.state;
-
-    this.setState({dropDownValue: value});
-    if (value === 1)
-    const selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
-    console.log(selectedAccount);
-   selectedAccount && account && this.setState({
-      contactName: value === 0 ? account.contact_name || '' : selectedAccount.contact_name || '',
-      contactPhone: value === 0 ? account.contact_phone || '': selectedAccount.contact_phone || '',
-      contactCity: value === 0 ? account.city || '' : selectedAccount.city || '',
-      contactStreet: value === 0 ? account.street || '' : selectedAccount.street || '',
-      contactBuilding: value === 0 ? account.house || '' : selectedAccount.house || '',
-      contactZip: value === 0 ? account.zip  || '' : selectedAccount.zip || ''
-    })
+  handleDropDownChange = (event, index, value) => {
+    const { account } = this.props;
+    const { recieverValue, avaliableAccounts, recieverAccount, senderAccount } = this.state;
+    console.log("reciever", recieverValue);
+    console.log(avaliableAccounts.filter(account => account.id === recieverValue)[0]);
+    let selectedAccount = {};
+    this.setState({ dropDownValue: value });
+    if (value === 1) selectedAccount = avaliableAccounts.filter(account => account.id === recieverValue)[0];
+    const newRecieverAccount = value === 0 ? account : selectedAccount;
+    this.setState({
+      recieverAccount: newRecieverAccount,
+      contact_name: newRecieverAccount.address.contact_name,
+      contact_phone: newRecieverAccount.address.contact_phone,
+      city: newRecieverAccount.address.city,
+      street: newRecieverAccount.address.street,
+      house: newRecieverAccount.address.house,
+      zip: newRecieverAccount.address.zip
+    });
   };
 
-  handleRecieverChange = (event, index, value) => this.setState({recieverValue: value});
+  handleRecieverChange = (event, index, value) => this.setState({ recieverValue: value });
 
   handleSelectChange = selection => {
     this.setState({ selectedData: selection });
@@ -109,6 +113,11 @@ class Requests extends Component {
     this.setState({ customAddress: !this.state.customAddress });
   };
 
+  handleAddressChange = (name, value) => {
+    console.log(name, value);
+    this.setState({ [name]: value });
+  };
+
   render() {
     const {
       modalOpen,
@@ -117,12 +126,13 @@ class Requests extends Component {
       dropDownValue,
       avaliableAccounts,
       recieverValue,
-      contactName,
-      contactPhone,
-      contactCity,
-      contactStreet,
-      contactBuilding,
-      contactZip
+      recieverAccount,
+      contact_name,
+      contact_phone,
+      city,
+      street,
+      house,
+      zip
     } = this.state;
     const { recipients, account } = this.props;
     const blockStyle = {
@@ -165,13 +175,18 @@ class Requests extends Component {
             <TextField
               className="input-field"
               disabled
-              value={dropDownValue === 1 ? this.state.senderValue : account.name}
+              value={dropDownValue === 0 ? this.state.senderValue : account.name}
               floatingLabelText="Отправитель"
             />
-            {dropDownValue === 1 ? (
+            {dropDownValue === 0 ? (
               <TextField className="input-field" disabled value={account.name} floatingLabelText="Получатель" />
             ) : (
-              <SelectField className="select-field" floatingLabelText="Получатель" value={recieverValue} onChange={this.handleRecieverChange}>
+              <SelectField
+                className="select-field"
+                floatingLabelText="Получатель"
+                value={recieverValue}
+                onChange={this.handleRecieverChange}
+              >
                 {avaliableAccounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
               </SelectField>
             )}
@@ -182,16 +197,58 @@ class Requests extends Component {
           {customAddress && (
             <div className="custom-address">
               <div className="row-item">
-                <TextField className="input-field" defaultValue={contactName} floatingLabelText="Контактное имя" />
-                <TextField className="input-field" defaultValue={contactPhone} floatingLabelText="Телефон" />
+                <TextField
+                  className="input-field"
+                  value={contact_name}
+                  defaultValue={recieverAccount.address.contact_name}
+                  name="contact_name"
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Контактное имя"
+                />
+                <TextField
+                  className="input-field"
+                  value={contact_phone}
+                  name="contact_phone"
+                  defaultValue={recieverAccount.address.contact_phone}
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Телефон"
+                />
               </div>
               <div className="row-item">
-                <TextField className="input-field" defaultValue={contactCity} floatingLabelText="Город" />
-                <TextField className="input-field" defaultValue={contactStreet} floatingLabelText="Улица" />
+                <TextField
+                  className="input-field"
+                  value={city}
+                  defaultValue={recieverAccount.address.city}
+                  name="city"
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Город"
+                />
+                <TextField
+                  className="input-field"
+                  value={street}
+                  defaultValue={recieverAccount.address.street}
+                  name="street"
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Улица"
+                />
               </div>
               <div className="row-item">
-                <TextField className="input-field" defaultValue={contactBuilding} floatingLabelText="Дом" />
-                <TextField className="input-field" defaultValue={contactZip} floatingLabelText="Индекс" />
+                <TextField
+                  className="input-field"
+                  value={house}
+                  defaultValue={recieverAccount.address.house}
+                  name="house"
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Дом"
+                />
+                <TextField
+                  className="input-field"
+                  value={zip}
+                  defaultValue={recieverAccount.address.zip}
+                  name="zip"
+                  onChange={e => this.handleAddressChange(e.target.name, e.target.value)}
+                  floatingLabelText="Индекс"
+                />
               </div>
             </div>
           )}
