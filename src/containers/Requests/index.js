@@ -19,20 +19,20 @@ import Checkbox from "material-ui/Checkbox";
 import Dialog from "material-ui/Dialog";
 import { checkRequest, getAccountById, getAllAccounts } from "../../actions/RequestsActions";
 import api from "../../api";
-import _ from 'lodash'
+import _ from "lodash";
 
-const SEND_TYPE = 1
-const RECIEVE_TYPE = 0
-const ON_REPAIR = 2
+const SEND_TYPE = 1;
+const RECIEVE_TYPE = 0;
+const ON_REPAIR = 2;
 
 const nullAddressObject = {
-    contact_name: null,
-    contact_phone: null,
-    city: null,
-    street: null,
-    house: null,
-    zip: null
-}
+  contact_name: null,
+  contact_phone: null,
+  city: null,
+  street: null,
+  house: null,
+  zip: null
+};
 
 class Requests extends Component {
   static propTypes = {
@@ -52,7 +52,7 @@ class Requests extends Component {
   componentWillMount() {
     const { account } = this.props;
     this.props.loadProfile();
-    this.props.getAllAccounts()
+    this.props.getAllAccounts();
   }
 
   handleChange = date => {
@@ -65,34 +65,39 @@ class Requests extends Component {
   };
 
   handleDropDownChange = (event, index, dropDownValue) => {
-    if (dropDownValue === this.state.dropDownValue) return
+    const adminAccount = this.props.accounts.find(acc => acc.is_admin) || {};
+    console.log('adminid', adminAccount.id);
+    console.log(dropDownValue === ON_REPAIR ? adminAccount.id : this.state.receiverAccountId);
+    if (dropDownValue === this.state.dropDownValue) return;
     this.setState({
       ...this.state,
       dropDownValue,
+      receiverAccountId: dropDownValue === ON_REPAIR ? adminAccount.id : this.state.receiverAccountId,
       ...nullAddressObject
-    })
+    });
   };
 
-  extractValue = (field) => {
-    return this.state[field] || this.extractDefaultValue(field)
-  }
+  extractValue = field => {
+    return this.state[field] || this.extractDefaultValue(field);
+  };
 
-  extractDefaultValue = (field) => {
-    if(this.state.dropDownValue === RECIEVE_TYPE){
-      const ownAddress = this.props.currentAccount.address || {}
-      return ownAddress[field] || ''
+  extractDefaultValue = field => {
+    if (this.state.dropDownValue === RECIEVE_TYPE) {
+      const ownAddress = this.props.currentAccount.address || {};
+      return ownAddress[field] || "";
+    } else {
+      const receiverAccount = this.props.accounts.find(acc => acc.id === this.state.receiverAccountId) || {};
+      console.log(receiverAccount, this.state.receiverAccountId);
+      const address = receiverAccount.address || {};
+      return address[field] || "";
     }
-    else {
-      const receiverAccount = this.props.accounts.find( acc => acc.id === this.state.receiverAccountId) || {}
-      const address = receiverAccount.address || {}
-      return address[field] || ''
-    }
-  }
+  };
 
-  handleRecieverChange = (event, index, value) => this.setState({
-    ...this.state,
-    receiverAccountId: value
-  });
+  handleRecieverChange = (event, index, value) =>
+    this.setState({
+      ...this.state,
+      receiverAccountId: value
+    });
 
   handleSelectChange = selection => {
     this.setState({ selectedData: selection });
@@ -101,54 +106,64 @@ class Requests extends Component {
   onSelectConfirm = () => {
     const { dropDownValue, selectedData } = this.state;
     this.modalSwitch();
-    this.props.checkRequest(selectedData, dropDownValue)
+    this.props.checkRequest(selectedData, dropDownValue);
   };
 
   switchCheckbox = () => {
-    this.setState({ ...this.state, customAddress: !this.state.customAddress, ...nullAddressObject });
+    this.setState({
+      ...this.state,
+      customAddress: !this.state.customAddress,
+      ...nullAddressObject
+    });
   };
 
   handleAddressChange = (name, value) => this.setState({ [name]: value });
 
   buildSenderPresentation = () => {
-    const result = _.reduce(this.props.requestInfo.fromAccount, (strRes, accountId) => {
-      const account = this.props.accounts.find( acc => acc.id === accountId)
-      return strRes + `${account.name}, `
-    }, '')
-    return result.slice(0, -2)
-  }
+    const result = _.reduce(
+      this.props.requestInfo.fromAccount,
+      (strRes, accountId) => {
+        const account = this.props.accounts.find(acc => acc.id === accountId);
+        return strRes + `${account.name}, `;
+      },
+      ""
+    );
+    return result.slice(0, -2);
+  };
 
-  buildTextFieldProps = (entity, text)=> {
+  buildTextFieldProps = (entity, text) => {
+    const { customAddress } = this.state;
     return {
       className: "input-field",
       value: this.extractValue(entity),
       name: entity,
+      disabled: !customAddress,
       onChange: e => this.handleAddressChange(e.target.name, e.target.value),
       floatinLabelText: text
-    }
-  }
+    };
+  };
 
   renderTextFields = () => {
     return (
       <div className="custom-address">
         <div className="row-item">
-          <TextField {...this.buildTextFieldProps("contact_name", "Контактное имя")}/>
-          <TextField {...this.buildTextFieldProps("contact_phone", "Контактный телефон")}/>
+          <TextField {...this.buildTextFieldProps("contact_name", "Контактное имя")} />
+          <TextField {...this.buildTextFieldProps("contact_phone", "Контактный телефон")} />
         </div>
         <div className="row-item">
-          <TextField {...this.buildTextFieldProps("city", "Город")}/>
-          <TextField {...this.buildTextFieldProps("street", "Улица")}/>
+          <TextField {...this.buildTextFieldProps("city", "Город")} />
+          <TextField {...this.buildTextFieldProps("street", "Улица")} />
         </div>
         <div className="row-item">
-          <TextField {...this.buildTextFieldProps("house", "Дом")}/>
-          <TextField {...this.buildTextFieldProps("zip", "Индекс")}/>
+          <TextField {...this.buildTextFieldProps("house", "Дом")} />
+          <TextField {...this.buildTextFieldProps("zip", "Индекс")} />
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   renderTable = () => {
-    const {dropDownValue, selectedData} = this.state
+    const { dropDownValue, selectedData } = this.state;
     return (
       <div>
         <SelectableTable
@@ -161,39 +176,48 @@ class Requests extends Component {
           <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   renderRecieverField = () => {
-    switch(this.state.dropDownValue){
+    switch (this.state.dropDownValue) {
       case RECIEVE_TYPE:
-        return <TextField className="input-field" disabled value={this.props.currentAccount.name}
-                floatingLabelText="Получатель" />
+        return (
+          <TextField
+            className="input-field"
+            disabled
+            value={this.props.currentAccount.name}
+            floatingLabelText="Получатель"
+          />
+        );
       case SEND_TYPE:
         return (
-          <SelectField className="select-field"
-                       floatingLabelText="Получатель"
-                       value={this.state.receiverAccountId}
-                       onChange={this.handleRecieverChange}>
-          {this.props.accounts.map(account => <MenuItem key={account.id} value={account.id}
-           primaryText={account.name} />)}
-        </SelectField>
-        )
+          <SelectField
+            className="select-field"
+            floatingLabelText="Получатель"
+            value={this.state.receiverAccountId}
+            onChange={this.handleRecieverChange}
+          >
+            {this.props.accounts.map(account => (
+              <MenuItem key={account.id} value={account.id} primaryText={account.name} />
+            ))}
+          </SelectField>
+        );
       case ON_REPAIR:
-        const adminAccount = this.props.accounts.find( acc => acc.is_admin) || {}
-        return <TextField className="input-field" disabled value={adminAccount.name || 'Москва'}
-                floatingLabelText="Получатель" />
+        const adminAccount = this.props.accounts.find(acc => acc.is_admin) || {};
+        return (
+          <TextField
+            className="input-field"
+            disabled
+            value={adminAccount.name || "Москва"}
+            floatingLabelText="Получатель"
+          />
+        );
     }
-  }
+  };
 
   render() {
-    const {
-      modalOpen,
-      selectedData,
-      customAddress,
-      dropDownValue,
-      receiverAccountId,
-    } = this.state;
+    const { modalOpen, selectedData, customAddress, dropDownValue, receiverAccountId } = this.state;
     const { currentAccount } = this.props;
     const blockStyle = {
       display: "block",
@@ -201,11 +225,11 @@ class Requests extends Component {
     };
     const modalStyle = {
       overlay: {
-        backgroundColor: "rgba(255, 0, 0, 0.9)",
+        backgroundColor: "rgba(255, 0, 0, 0.9)"
       }
     };
 
-    if(modalOpen) return this.renderTable()
+    if (modalOpen) return this.renderTable();
     return (
       <div className="requests-wrapper">
         <Card style="card-content">
@@ -214,7 +238,7 @@ class Requests extends Component {
             <DropDownMenu value={dropDownValue} onChange={this.handleDropDownChange}>
               <MenuItem value={0} primaryText="Получение" />
               <MenuItem value={1} primaryText="Отправление" />
-              {!currentAccount.is_admin ? <MenuItem value={2} primaryText="На ремонт" /> : null }
+              {!currentAccount.is_admin ? <MenuItem value={2} primaryText="На ремонт" /> : null}
             </DropDownMenu>
           </div>
           <div className="column-item">
@@ -225,7 +249,7 @@ class Requests extends Component {
             <TextField
               className="input-field"
               disabled
-              value={dropDownValue === RECIEVE_TYPE ? this.buildSenderPresentation(): currentAccount.name}
+              value={dropDownValue === RECIEVE_TYPE ? this.buildSenderPresentation() : currentAccount.name}
               floatingLabelText="Отправитель"
             />
             {this.renderRecieverField()}
@@ -233,7 +257,7 @@ class Requests extends Component {
           <div className="checkbox-item">
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
           </div>
-          {customAddress && this.renderTextFields()}
+          {this.renderTextFields()}
         </Card>
       </div>
     );
@@ -252,6 +276,6 @@ const mapDispatchToProps = {
   getAccountById,
   getAllAccounts,
   loadProfile: api.actions.profile.index
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Requests);
