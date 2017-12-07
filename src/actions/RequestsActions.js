@@ -6,9 +6,9 @@ export function checkRequest(tools, type) {
     meta: {
       fetch: {
         url: "~products/check_invoice",
-        data:{
+        data: {
           products: tools,
-          invoice_type: type,
+          invoice_type: type
         },
         method: "POST"
       }
@@ -28,7 +28,7 @@ export function getAccountById(id) {
   };
 }
 
-export function getAllAccounts(){
+export function getAllAccounts() {
   return {
     types: actionTypesFor("index", "accounts"),
     meta: {
@@ -36,5 +36,25 @@ export function getAllAccounts(){
         url: `~user/account/all`
       }
     }
-  }
+  };
+}
+
+export function sendRequest(data){
+  return{
+    types: actionTypesFor("show", "requests"),
+    meta: {
+      fetch: {
+        url: "~products/invoice",
+        data: {
+          products: data.product,
+          invoice_type: data.invoice_type,
+          address: data.address,
+          customAddress: data.customAddress,
+          comment: data.comment,
+          target: data.target,
+        },
+        method: "POST"
+      }
+    }
+  };
 }

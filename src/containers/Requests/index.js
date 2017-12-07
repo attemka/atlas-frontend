@@ -17,7 +17,7 @@ import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
 import Checkbox from "material-ui/Checkbox";
 import Dialog from "material-ui/Dialog";
-import { checkRequest, getAccountById, getAllAccounts } from "../../actions/RequestsActions";
+import { checkRequest, getAccountById, getAllAccounts, sendRequest } from "../../actions/RequestsActions";
 import api from "../../api";
 import _ from "lodash";
 
@@ -66,7 +66,7 @@ class Requests extends Component {
 
   handleDropDownChange = (event, index, dropDownValue) => {
     const adminAccount = this.props.accounts.find(acc => acc.is_admin) || {};
-    console.log('adminid', adminAccount.id);
+    console.log("adminid", adminAccount.id);
     console.log(dropDownValue === ON_REPAIR ? adminAccount.id : this.state.receiverAccountId);
     if (dropDownValue === this.state.dropDownValue) return;
     this.setState({
@@ -129,6 +129,39 @@ class Requests extends Component {
       ""
     );
     return result.slice(0, -2);
+  };
+
+  sendRequest = () => {
+    const {
+      dropDownValue,
+      receiverAccountId,
+      selectedData,
+      customAddress,
+      comment,
+      target,
+      contact_phone,
+      city,
+      zip,
+      contact_name,
+      street,
+      house
+    } = this.state;
+    const customAddressData = customAddress ? {
+      contact_phone,
+      city,
+      zip,
+      contact_name,
+      street,
+      house
+    } : null;
+    const data = {
+      products: selectedData,
+      invoice_type: dropDownValue,
+      address: customAddress ? null : receiverAccountId,
+      customAddressData,
+      comment,
+      target,
+    };
   };
 
   buildTextFieldProps = (entity, text) => {
@@ -258,6 +291,7 @@ class Requests extends Component {
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
           </div>
           {this.renderTextFields()}
+          <RaisedButton label="Подтвердить" onClick={this.sendRequest} />
         </Card>
       </div>
     );
