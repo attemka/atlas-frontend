@@ -1,4 +1,5 @@
 import {actionTypesFor} from 'trivial-redux';
+import {LOGOUT} from '../endpoints/auth'
 
 export function login(email, password){
   return {
@@ -35,5 +36,11 @@ export function signup(name, email, password, passwordRepeat) {
       email,
       password,
     }
+  }
+}
+
+export function logout(){
+  return {
+    type: LOGOUT
   }
 }

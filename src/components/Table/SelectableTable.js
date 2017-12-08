@@ -14,6 +14,10 @@ export const columns = [
         accessor: 'title',
     },
     {
+      Header:'Наименование',
+      accessor: 'name'
+    },
+    {
         Header: 'Номер',
         accessor: 'number',
     },
@@ -32,7 +36,10 @@ export const columns = [
     {
         Header: 'Когда',
         id: 'UpdateDate',
-        accessor: data => moment(data.location_update).format('DD-MM-YYYY'),
+        accessor: data => {
+          if (data.location_update) return moment(data.location_update).format('DD-MM-YYYY')
+          else return ''
+        },
     },
     {
         Header: 'Комментарий',

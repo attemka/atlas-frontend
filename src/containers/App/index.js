@@ -12,10 +12,11 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 class App extends Component {
   render() {
+    console.log(this.props)
     return (
       <MuiThemeProvider>
         <div className="app-wrapper">
-          <HeaderAppbar />
+          <HeaderAppbar history={this.props.history} />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
