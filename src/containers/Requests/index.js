@@ -66,8 +66,6 @@ class Requests extends Component {
 
   handleDropDownChange = (event, index, dropDownValue) => {
     const adminAccount = this.props.accounts.find(acc => acc.is_admin) || {};
-    console.log("adminid", adminAccount.id);
-    console.log(dropDownValue === ON_REPAIR ? adminAccount.id : this.state.receiverAccountId);
     if (dropDownValue === this.state.dropDownValue) return;
     this.setState({
       ...this.state,
@@ -87,7 +85,6 @@ class Requests extends Component {
       return ownAddress[field] || "";
     } else {
       const receiverAccount = this.props.accounts.find(acc => acc.id === this.state.receiverAccountId) || {};
-      console.log(receiverAccount, this.state.receiverAccountId);
       const address = receiverAccount.address || {};
       return address[field] || "";
     }
@@ -131,6 +128,22 @@ class Requests extends Component {
     return result.slice(0, -2);
   };
 
+  checkButtonAvaliability = () => {
+    const { receiverAccountId, customAddress, contact_phone, city, zip, contact_name, street, house } = this.state;
+    const addressFields = [contact_phone, city, zip, contact_name, street, house];
+    console.log(receiverAccountId, customAddress);
+    return receiverAccountId
+      ? customAddress
+        ? _(this.state)
+            .pick(addressFields)
+            .pickBy().toPairs.length === addressFields
+        : false
+      : !(customAddress &&
+          _(this.state)
+            .pick(addressFields)
+            .pickBy().toPairs.length === addressFields);
+  };
+
   sendRequest = () => {
     const {
       dropDownValue,
@@ -146,21 +159,23 @@ class Requests extends Component {
       street,
       house
     } = this.state;
-    const customAddressData = customAddress ? {
-      contact_phone,
-      city,
-      zip,
-      contact_name,
-      street,
-      house
-    } : null;
+    const customAddressData = customAddress
+      ? {
+          contact_phone,
+          city,
+          zip,
+          contact_name,
+          street,
+          house
+        }
+      : null;
     const data = {
       products: selectedData,
       invoice_type: dropDownValue,
       address: customAddress ? null : receiverAccountId,
       customAddressData,
       comment,
-      target,
+      target
     };
   };
 
@@ -291,7 +306,9 @@ class Requests extends Component {
             <Checkbox className="checkbox" onCheck={this.switchCheckbox} checked={customAddress} />Указать другой адрес.
           </div>
           {this.renderTextFields()}
-          <RaisedButton label="Подтвердить" onClick={this.sendRequest} />
+          <div className="row-item">
+            <RaisedButton label="Подтвердить" disabled={this.checkButtonAvaliability()} onClick={this.sendRequest} />
+          </div>
         </Card>
       </div>
     );
