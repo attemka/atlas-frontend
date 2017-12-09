@@ -20,7 +20,12 @@ class HeaderAppbar extends Component {
   render() {
     const { isLogged, userName, isAdmin } = this.props;
 
-    const Login = () => <FlatButton href="/login" label="Логин" labelStyle={{color:'white'}} />;
+    const Login = () => (
+      <div>
+        <FlatButton href="/login" label="Логин" labelStyle={{color:'white'}} />
+        <FlatButton href="/signup" label="Регистрация" labelStyle={{color:'white'}} />;
+      </div>
+    )
 
     const Logged = () => (
       <IconMenu
