@@ -46,7 +46,7 @@ export function sendRequest(data){
       fetch: {
         url: "~products/invoice",
         data: {
-          products: data.product,
+          products: data.products,
           invoice_type: data.invoice_type,
           address: data.address,
           customAddress: data.customAddress,

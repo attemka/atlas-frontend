@@ -40,19 +40,16 @@ class Requests extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = {
-      modalOpen: false,
-      receiverAccountId: 0,
-      customAddress: false,
-      dropDownValue: 0,
-      selectedData: []
-    };
-  }
-
-  componentWillMount() {
-    const { account } = this.props;
     this.props.loadProfile();
     this.props.getAllAccounts();
+    this.state = {
+      modalOpen: false,
+      customAddress: false,
+      dropDownValue: 0,
+      receiverAccountId: this.props.currentAccount.id,
+      selectedData: [],
+      target: 0
+    };
   }
 
   handleChange = date => {
@@ -89,6 +86,13 @@ class Requests extends Component {
       return address[field] || "";
     }
   };
+  handleTargetChange = (event, index, value) => {
+    this.setState({ target: value });
+  };
+
+  handleCommentChange = (name, value) => {
+    this.setState({ comment: value });
+  };
 
   handleRecieverChange = (event, index, value) =>
     this.setState({
@@ -107,11 +111,10 @@ class Requests extends Component {
   };
 
   switchCheckbox = () => {
-    this.setState({
-      ...this.state,
-      customAddress: !this.state.customAddress,
-      ...nullAddressObject
-    });
+    const objectAddress = !this.state.customAddress
+      ? _.mapValues(nullAddressObject, (value, key) => this.extractValue(key))
+      : nullAddressObject;
+    this.setState({ ...this.state, customAddress: !this.state.customAddress, ...objectAddress });
   };
 
   handleAddressChange = (name, value) => this.setState({ [name]: value });
@@ -129,19 +132,36 @@ class Requests extends Component {
   };
 
   checkButtonAvaliability = () => {
-    const { receiverAccountId, customAddress, contact_phone, city, zip, contact_name, street, house } = this.state;
-    const addressFields = [contact_phone, city, zip, contact_name, street, house];
-    console.log(receiverAccountId, customAddress);
-    return receiverAccountId
+    const {
+      receiverAccountId,
+      customAddress,
+      selectedData,
+      contact_phone,
+      city,
+      zip,
+      contact_name,
+      street,
+      house
+    } = this.state;
+    const addressFields = ["contact_phone", "city", "zip", "contact_name", "street", "house"];
+    console.log(receiverAccountId, customAddress, selectedData.length);
+    console.log( 'case',
+      _(this.state)
+        .pick(addressFields)
+        .pickBy().toPairs().value().length === addressFields.length
+    );
+    console.log(contact_phone, city, zip, contact_name, street, house);
+    if (selectedData.length === 0) return true;
+    return !(receiverAccountId
       ? customAddress
         ? _(this.state)
             .pick(addressFields)
-            .pickBy().toPairs.length === addressFields
-        : false
-      : !(customAddress &&
-          _(this.state)
-            .pick(addressFields)
-            .pickBy().toPairs.length === addressFields);
+            .pickBy().toPairs().value().length === addressFields.length
+        : true
+      : customAddress &&
+        _(this.state)
+          .pick(addressFields)
+          .pickBy().toPairs().value().length === addressFields.length);
   };
 
   sendRequest = () => {
@@ -172,11 +192,15 @@ class Requests extends Component {
     const data = {
       products: selectedData,
       invoice_type: dropDownValue,
-      address: customAddress ? null : receiverAccountId,
-      customAddressData,
       comment,
       target
     };
+
+    if (customAddress) data['custom_address'] = customAddressData;
+    else data['address'] = receiverAccountId;
+    console.log(data);
+    this.setState({selectedData: []});
+    this.props.sendRequest(data);
   };
 
   buildTextFieldProps = (entity, text) => {
@@ -187,7 +211,7 @@ class Requests extends Component {
       name: entity,
       disabled: !customAddress,
       onChange: e => this.handleAddressChange(e.target.name, e.target.value),
-      floatinLabelText: text
+      floatingLabelText: text
     };
   };
 
@@ -265,7 +289,7 @@ class Requests extends Component {
   };
 
   render() {
-    const { modalOpen, selectedData, customAddress, dropDownValue, receiverAccountId } = this.state;
+    const { modalOpen, selectedData, customAddress, dropDownValue, receiverAccountId, comment, target } = this.state;
     const { currentAccount } = this.props;
     const blockStyle = {
       display: "block",
@@ -307,6 +331,25 @@ class Requests extends Component {
           </div>
           {this.renderTextFields()}
           <div className="row-item">
+            <SelectField
+              className="select-field"
+              floatingLabelText="Цель заявки"
+              value={target}
+              onChange={this.handleTargetChange}
+            >
+              <MenuItem value={0} primaryText="Выставка" />
+              <MenuItem value={1} primaryText="Демонстрация" />
+              <MenuItem value={2} primaryText="Семинар" />
+              <MenuItem value={3} primaryText="Возврат" />
+            </SelectField>
+            <TextField
+              className="input-field"
+              value={comment}
+              floatingLabelText="Комментарий"
+              onChange={this.handleCommentChange}
+            />
+          </div>
+          <div className="row-item">
             <RaisedButton label="Подтвердить" disabled={this.checkButtonAvaliability()} onClick={this.sendRequest} />
           </div>
         </Card>
@@ -326,6 +369,7 @@ const mapDispatchToProps = {
   checkRequest,
   getAccountById,
   getAllAccounts,
+  sendRequest,
   loadProfile: api.actions.profile.index
 };
 
