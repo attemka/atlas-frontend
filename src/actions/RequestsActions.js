@@ -41,7 +41,7 @@ export function getAllAccounts() {
 
 export function sendRequest(data){
   return{
-    types: actionTypesFor("show", "requests"),
+    types: actionTypesFor("create", "requests"),
     meta: {
       fetch: {
         url: "~products/invoice",

@@ -29,6 +29,15 @@ export default {
               requestType: action.payload.invoice_type
             }
           }
+      case this.types.create.success:
+        return {
+            ...state,
+            currentRequestMetaInfo: {
+              fromAccount:[],
+              toAccount: undefined,
+              requestType: undefined
+            }
+        }
       default:
         return state;
     }

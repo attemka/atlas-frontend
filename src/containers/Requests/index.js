@@ -123,7 +123,7 @@ class Requests extends Component {
     const result = _.reduce(
       this.props.requestInfo.fromAccount,
       (strRes, accountId) => {
-        const account = this.props.accounts.find(acc => acc.id === accountId);
+        const account = this.props.accounts.find(acc => acc.id === accountId) || this.props.currentAccount;
         return strRes + `${account.name}, `;
       },
       ""
