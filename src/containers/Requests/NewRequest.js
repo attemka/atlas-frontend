@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 import { login } from "../../actions/LoginActions";
-import "./Requests.scss";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
 import SelectableTable from "../../components/Table/SelectableTable";
@@ -20,6 +19,7 @@ import Dialog from "material-ui/Dialog";
 import { checkRequest, getAccountById, getAllAccounts, sendRequest } from "../../actions/RequestsActions";
 import api from "../../api";
 import _ from "lodash";
+import "./NewRequest.scss";
 
 const SEND_TYPE = 1;
 const RECIEVE_TYPE = 0;
@@ -34,7 +34,7 @@ const nullAddressObject = {
   zip: null
 };
 
-class Requests extends Component {
+class NewRequest extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired
   };
@@ -67,6 +67,7 @@ class Requests extends Component {
     this.setState({
       ...this.state,
       dropDownValue,
+      selectedData: [],
       receiverAccountId: dropDownValue === ON_REPAIR ? adminAccount.id : this.state.receiverAccountId,
       ...nullAddressObject
     });
@@ -242,6 +243,7 @@ class Requests extends Component {
           className="requests-table"
           onSelectChange={this.handleSelectChange}
           selection={selectedData}
+          forInvoices={true}
           showOwn={dropDownValue !== RECIEVE_TYPE}
         />
         <div className="apply-btn">
@@ -373,4 +375,4 @@ const mapDispatchToProps = {
   loadProfile: api.actions.profile.index
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Requests);
+export default connect(mapStateToProps, mapDispatchToProps)(NewRequest);

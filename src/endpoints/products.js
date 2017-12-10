@@ -1,6 +1,9 @@
+import { actionTypesFor } from "trivial-redux";
+
 const initialState = {
   totalPages: 0,
   productsList: [],
+  invoicesList: []
 };
 
 export default {
@@ -13,10 +16,15 @@ export default {
       return {
         ...state,
         totalPages: action.payload.count,
-        productsList: action.payload.results,
+        productsList: action.payload.results
+      };
+    case actionTypesFor("display", "requests").success:
+      return {
+        ...state,
+        invoicesList: action.payload
       };
     default:
       return state;
     }
-  },
+  }
 };

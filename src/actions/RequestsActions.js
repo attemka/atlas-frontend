@@ -58,3 +58,15 @@ export function sendRequest(data){
     }
   };
 }
+
+export function getRequests() {
+  return {
+    types: actionTypesFor("display", "requests"),
+    meta: {
+      fetch: {
+        url: `~products/invoice/all?page_size=100`,
+        method: "GET"
+      }
+    }
+  };
+}

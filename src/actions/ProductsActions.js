@@ -12,3 +12,16 @@ export function getProducts(params) {
     }
   };
 }
+
+export function getProductsForInvoices(params) {
+  return {
+    types: actionTypesFor("index", "products"),
+    meta: {
+      fetch: {
+        url: "~products/for_invoice",
+        params: params,
+        method: "GET"
+      }
+    }
+  };
+}

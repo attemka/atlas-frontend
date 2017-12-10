@@ -1,0 +1,17 @@
+.requests-list-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 90%;
+  z-index: 1;
+}
+.invoice-card{
+  display: flex;
+  margin: 20px 40px;
+  flex: 0 25%;
+  max-width: 25%;
+  max-height: 200px;
+  background-color: red;
+  min-height: 100px;
+}
