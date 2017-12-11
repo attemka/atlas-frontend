@@ -25,11 +25,11 @@ class RequestsList extends Component {
         {invoicesList.length !== 0 &&
           invoicesList.map(invoice => (
             <Card className="invoice-card" onClick={() => this.props.history.push(`/requests/${invoice.id}`)}>
-              <CardHeader titleStyle={{fontWeight: '800', fontSize: '20px'}} title={`Заявка №${invoice.id}`} />
+              <CardHeader titleStyle={{fontWeight: "800", fontSize: "20px"}} title={`Заявка №${invoice.id}`} />
               <CardText>
-                  <div className="invoice-info"><span className="category-name">Из: </span>{" " + invoice.from_account.name} </div>
-                  <div className="invoice-info"><span className="category-name">В: </span>{" " + invoice.to_account.name}</div>
-                  <div className="invoice-info"><span className="category-name">Статус: </span>{" " + STATUS_NAMES[invoice.status]}</div>
+                <div className="invoice-info"><span className="category-name">Из: </span>{" " + invoice.from_account.name} </div>
+                <div className="invoice-info"><span className="category-name">В: </span>{" " + invoice.to_account.name}</div>
+                <div className="invoice-info"><span className="category-name">Статус: </span>{" " + STATUS_NAMES[invoice.status]}</div>
               </CardText>
             </Card>
           ))}

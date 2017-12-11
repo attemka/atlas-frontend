@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getRequests } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import api from "../../api";
+import moment from "moment";
 import "./RequestItem.scss";
 
 const STATUS_NAMES = {
@@ -53,9 +54,13 @@ class RequestItem extends Component {
                 {this.renderAccountBlock(invoice.to_account, "Кому:")}
                     <div className="content-block">
                         <h3>История заявки:</h3>
+                      {moment(invoice.invoice_changes[0].time).format('DD-MM-YYYY hh:mm:ss')} : Заявка создана.
                     </div>
                     <div className="content-block">
                         <h3>Выбранные инструменты:</h3>
+                      {invoice.invoice_lines.map(item =>(
+                        <div className="invoice-item">{item.id} {item.title} {item.number_for_order}</div>
+                      ))}
                     </div>
                 </div>
             </CardText>
