@@ -1,0 +1,33 @@
+.requests-item-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 90%;
+  z-index: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-item-card {
+  display: flex;
+  width: 75%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-height: 100px;
+  justify-content: center;
+}
+
+.card-content{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.content-block{
+  padding: 25px;
+
+  .param-title{
+    font-weight: 800;
+    padding-right: 5px;
+  }
+}

@@ -3,15 +3,30 @@
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 90%;
+  max-height: 90%;
   z-index: 1;
 }
 .invoice-card{
+  cursor: pointer;
   display: flex;
   margin: 20px 40px;
   flex: 0 25%;
   max-width: 25%;
   max-height: 200px;
-  background-color: red;
   min-height: 100px;
+}
+.card-header{
+  font-weight: 800;
+}
+
+.invoice-info{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  .category-name{
+    font-weight: 600;
+    padding-right: 5px;
+    //flex-basis: 60px;
+  }
 }

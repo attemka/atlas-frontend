@@ -6,6 +6,7 @@ import Home from "../Home";
 import Login from "../Login";
 import NewRequest from "../Requests/NewRequest";
 import RequestsList from "../Requests/RequestsList";
+import RequestItem from "../Requests/RequestItem"
 import SignUp from "../SignUp";
 import "./App.scss";
 import HeaderAppbar from "../../components/header-appbar";
@@ -22,6 +23,7 @@ class App extends Component {
           <Route path="/signup" component={SignUp} />
           <Route exact path="/requests" component={RequestsList} />
           <Route exact path="/requests/new" component={NewRequest} />
+          <Route path="/requests/:id" component={RequestItem} />
         </div>
       </MuiThemeProvider>
     );
