@@ -59,6 +59,19 @@ export function sendRequest(data){
   };
 }
 
+export function updateInvoiceStatus(id, data ) {
+    return {
+        types: actionTypesFor("update", "requests"),
+        meta: {
+            fetch: {
+                url: `~products/invoice/${id}`,
+                data: data,
+                method: "PUT"
+            }
+        }
+    };
+}
+
 export function getRequests() {
   return {
     types: actionTypesFor("display", "requests"),

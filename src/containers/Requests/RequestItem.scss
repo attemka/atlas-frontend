@@ -25,10 +25,14 @@
 }
 .content-block{
   padding: 25px;
-  flex: 0 30%;
+  flex: 0 40%;
 
   .param-title{
     font-weight: 800;
     padding-right: 5px;
   }
+}
+.input-block{
+  display: flex;
+  align-items: baseline;
 }
