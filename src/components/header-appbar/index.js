@@ -17,6 +17,10 @@ class HeaderAppbar extends Component {
     this.props.history.push('/login')
   }
 
+  toAccountManaging = () => {
+    this.props.history.push('/profile')
+  }
+
   render() {
     const { isLogged, userName, isAdmin } = this.props;
 
@@ -37,8 +41,8 @@ class HeaderAppbar extends Component {
         targetOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "top" }}
       >
-        <MenuItem primaryText="Управление аккаунтом" />
-        <MenuItem primaryText="Управление филиалом" />
+        <MenuItem primaryText="Управление аккаунтом" onClick={this.toAccountManaging} />
+        <MenuItem primaryText="Управление филиалом"/>
         <MenuItem primaryText="Выход" onClick={this.logout} />
       </IconMenu>
     );

@@ -9,6 +9,7 @@ import SignUp from "../SignUp";
 import "./App.scss";
 import HeaderAppbar from "../../components/header-appbar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Profile from '../Profile'
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
           <Route path="/requests" component={Requests} />
+          <Route path="/profile" component={Profile}/>
         </div>
       </MuiThemeProvider>
     );
