@@ -1,4 +1,4 @@
-import update from 'immutability-helper'
+import update from "immutability-helper";
 
 const initialState = {
   totalPages: 0,
@@ -10,13 +10,13 @@ const initialState = {
   }
 };
 
-function replaceRequestById(state, request){
-  const indexReplace = state.requestsList.findIndex( r => r.id = request.id)
-  console.log(indexReplace, "1")
-  let newRequests = state.requestsList
-  if (indexReplace !== -1) newRequests = update(state.requestsList, {$splice: [[indexReplace, 1, request]]})
-  console.log(newRequests)
-  return {...state, requestsList: newRequests}
+function replaceRequestById(state, request) {
+  const indexReplace = state.requestsList.findIndex(r => (r.id = request.id));
+  console.log(indexReplace, "1");
+  let newRequests = state.requestsList;
+  if (indexReplace !== -1) newRequests = update(state.requestsList, { $splice: [[indexReplace, 1, request]] });
+  console.log(newRequests);
+  return { ...state, requestsList: newRequests };
 }
 
 export default {
@@ -32,9 +32,9 @@ export default {
         requestsList: action.payload.results
       };
     case this.types.update.success:
-      return replaceRequestById(state, action.payload)
+      return replaceRequestById(state, action.payload);
     case this.types.show.success:
-      if (action.request_id) return replaceRequestById(state, action.payload)
+      if (action.request_id) return replaceRequestById(state, action.payload);
       return {
         ...state,
         currentRequestMetaInfo: {

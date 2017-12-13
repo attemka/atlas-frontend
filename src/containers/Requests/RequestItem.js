@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getRequests } from "../../actions/RequestsActions";
+import { getRequest } from "../../actions/RequestsActions";
 import { updateInvoiceStatus } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText, CardActions } from "material-ui/Card";
 import api from "../../api";
@@ -21,7 +21,7 @@ const STATUS_NAMES = {
 class RequestItem extends Component {
   constructor(props) {
     super(props);
-    this.props.getRequests([0, 1], 1);
+    this.props.getRequest(parseInt(props.match.params["id"], 10));
     this.state = {
       trackingNum: ""
     };
@@ -81,7 +81,8 @@ class RequestItem extends Component {
   };
 
   render() {
-    const { invoice, testItem } = this.props;
+    const { invoice } = this.props;
+    console.log(invoice);
     const { trackingNum } = this.state;
     return (
       <div className="requests-item-wrapper">
@@ -162,12 +163,12 @@ RequestItem.defaultProps = {
 const mapStateToProps = (state, props) => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
-  invoice: state.requests.requestsList.find(invoice => invoice.id === parseInt(props.match.params["id"], 10)),
+  invoice: state.requests.requestsList,
   testItem: props
 });
 
 const mapDispatchToProps = {
-  getRequests,
+  getRequest,
   updateInvoiceStatus
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RequestItem);

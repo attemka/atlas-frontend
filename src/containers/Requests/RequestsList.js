@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getRequests } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import api from "../../api";
+import ReactPaginate from "react-paginate";
 import "./RequestsList.scss";
 
 const STATUS_NAMES = {
@@ -15,7 +16,10 @@ const STATUS_NAMES = {
 class RequestsList extends Component {
   constructor(props) {
     super(props);
-    this.props.getRequests();
+    this.props.getRequests([0, 1], 1);
+    this.state = {
+      page: 1
+    };
   }
 
   render() {
@@ -24,12 +28,25 @@ class RequestsList extends Component {
       <div className="requests-list-wrapper">
         {invoicesList.length !== 0 &&
           invoicesList.map(invoice => (
-            <Card key={invoice.id} className="invoice-card" onClick={() => this.props.history.push(`/requests/${invoice.id}`)}>
-              <CardHeader titleStyle={{fontWeight: "800", fontSize: "20px"}} title={`Заявка №${invoice.id}`} />
+            <Card
+              key={invoice.id}
+              className="invoice-card"
+              onClick={() => this.props.history.push(`/requests/${invoice.id}`)}
+            >
+              <CardHeader titleStyle={{ fontWeight: "800", fontSize: "20px" }} title={`Заявка №${invoice.id}`} />
               <CardText>
-                <div className="invoice-info"><span className="category-name">Из: </span>{" " + invoice.from_account.name} </div>
-                <div className="invoice-info"><span className="category-name">В: </span>{" " + invoice.to_account.name}</div>
-                <div className="invoice-info"><span className="category-name">Статус: </span>{" " + STATUS_NAMES[invoice.status]}</div>
+                <div className="invoice-info">
+                  <span className="category-name">Из: </span>
+                  {" " + invoice.from_account.name}{" "}
+                </div>
+                <div className="invoice-info">
+                  <span className="category-name">В: </span>
+                  {" " + invoice.to_account.name}
+                </div>
+                <div className="invoice-info">
+                  <span className="category-name">Статус: </span>
+                  {" " + STATUS_NAMES[invoice.status]}
+                </div>
               </CardText>
             </Card>
           ))}

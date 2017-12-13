@@ -33,7 +33,7 @@ export function getAllAccounts() {
     types: actionTypesFor("index", "accounts"),
     meta: {
       fetch: {
-        url: `~user/account/all`
+        url: "~user/account/all"
       }
     }
   };
@@ -60,22 +60,22 @@ export function sendRequest(data){
 }
 
 export function updateInvoiceStatus(id, data ) {
-    return {
-        types: actionTypesFor("update", "requests"),
-        meta: {
-            fetch: {
-                url: `~products/invoice/${id}`,
-                data: data,
-                method: "PUT"
-            }
-        }
-    };
+  return {
+    types: actionTypesFor("update", "requests"),
+    meta: {
+      fetch: {
+        url: `~products/invoice/${id}`,
+        data: data,
+        method: "PUT"
+      }
+    }
+  };
 }
 
 export function getRequests(statuses, page) {
   let statusString;
   if (statuses && statuses.length){
-    statusString = statuses.map(el => `status=${el}`).join('&&');
+    statusString = statuses.map(el => `status=${el}`).join("&");
   }
 
   return {
@@ -91,12 +91,12 @@ export function getRequests(statuses, page) {
 
 export function getRequest(id) {
   return {
-    types: actionTypesFor('index', 'requests'),
+    types: actionTypesFor("show", "requests"),
     meta: {
       fetch :{
         url: `~products/invoice/${id}`
       },
       request_id: id
     }
-  }
+  };
 }

@@ -24,7 +24,7 @@ class App extends Component {
           <Route path="/signup" component={SignUp} />
           <Route exact path="/requests/" component={RequestsList} />
           <Route exact path="/requests/new" component={NewRequest} />
-          <Route exact path="/requests/:id(/d+)" component={RequestItem} />
+          <Route exact path="/requests/:id(\d+)" component={RequestItem} />
           <Route path="/profile" component={Profile}/>
         </div>
       </MuiThemeProvider>
