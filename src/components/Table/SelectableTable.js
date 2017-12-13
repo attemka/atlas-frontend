@@ -46,9 +46,7 @@ export const columns = [
         accessor: 'comment',
     },
 ];
-const tableStyle = {
-  backgroundColor: "rgba(255,255,255,1)"
-};
+
 class SelectableTable extends Component {
   constructor(props) {
     super(props);
@@ -139,7 +137,6 @@ class SelectableTable extends Component {
     };
     return (
       <CheckboxTable
-        style={tableStyle}
         ref={r => (this.checkboxTable = r)}
         data={this.props.products}
         page={this.state.currPage-1}

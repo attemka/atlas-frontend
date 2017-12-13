@@ -79,7 +79,6 @@ class RequestItem extends Component {
   render() {
     const { invoice, testItem } = this.props;
     const { trackingNum } = this.state;
-    console.log(invoice.invoice_changes);
     return (
       <div className="requests-item-wrapper">
         {invoice["id"] && (

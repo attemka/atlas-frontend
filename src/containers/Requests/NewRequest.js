@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
 import { login } from "../../actions/LoginActions";
@@ -21,6 +21,8 @@ import api from "../../api";
 import _ from "lodash";
 import "./NewRequest.scss";
 import Chip from 'material-ui/Chip';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 const SEND_TYPE = 1;
 const RECIEVE_TYPE = 0;
@@ -282,10 +284,10 @@ class NewRequest extends Component {
             typeFilter={this.state.typeFilter}
             showOwn={dropDownValue !== RECIEVE_TYPE}
           />
+          <FloatingActionButton style={{ right: 40,position: 'fixed', bottom: 60}} onClick={this.onSelectConfirm}>
+            <ContentAdd />
+          </FloatingActionButton>
         </Card>
-        <div className="apply-btn">
-          <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
-        </div>
       </div>
     );
   };
@@ -330,16 +332,6 @@ class NewRequest extends Component {
   render() {
     const { modalOpen, selectedData, customAddress, dropDownValue, receiverAccountId, comment, target } = this.state;
     const { currentAccount } = this.props;
-    const blockStyle = {
-      display: "block",
-      margin: "10px"
-    };
-    const modalStyle = {
-      overlay: {
-        backgroundColor: "rgba(255, 0, 0, 0.9)"
-      }
-    };
-
     if (modalOpen) return this.renderTable();
     return (
       <div className="requests-wrapper">
