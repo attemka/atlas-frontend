@@ -3,7 +3,7 @@ import { actionTypesFor } from "trivial-redux";
 const initialState = {
   totalPages: 0,
   productsList: [],
-  invoicesList: []
+  fetching: false,
 };
 
 export default {
@@ -12,17 +12,23 @@ export default {
   initialState,
   reducer(state, action) {
     switch (action.type) {
-    case this.types.index.success:
-      return {
-        ...state,
-        totalPages: action.payload.count,
-        productsList: action.payload.results
-      };
-    case actionTypesFor("display", "requests").success:
-      return {
-        ...state,
-        invoicesList: action.payload
-      };
+      case this.types.index.load:
+        return {
+          ...state,
+          fetching: true
+        }
+      case this.types.index.success:
+        return {
+          ...state,
+          totalPages: action.payload.count,
+          productsList: action.payload.results,
+          fetching: false
+        };
+      case this.types.index.failure:
+        return {
+          ...state,
+          fetching: false
+        }
     default:
       return state;
     }

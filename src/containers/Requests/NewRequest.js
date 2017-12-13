@@ -201,7 +201,7 @@ class NewRequest extends Component {
     else data['address'] = receiverAccountId;
     console.log(data);
     this.setState({selectedData: []});
-    this.props.sendRequest(data);
+    this.props.sendRequest(data).then(()=> this.props.history.push('/requests'))
   };
 
   buildTextFieldProps = (entity, text) => {

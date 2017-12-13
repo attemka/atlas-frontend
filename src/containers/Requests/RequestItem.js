@@ -32,7 +32,6 @@ class RequestItem extends Component {
   updateInvioceStatus = () => {
     this.props
       .updateInvoiceStatus(this.props.invoice.id, { status: this.props.invoice.status + 1 })
-      .then(res => this.props.getRequests());
   };
 
   sendTrackingNumber = () => {
@@ -40,7 +39,6 @@ class RequestItem extends Component {
     if (this.state.trackingNum) {
       this.props.updateInvoiceStatus(this.props.invoice.id, { status: 1, track_id: trackingNum }).then(result => {
         this.setState({ trackingNum: "" });
-        this.props.getRequests();
       });
     }
   };
@@ -156,7 +154,7 @@ RequestItem.defaultProps = {
 const mapStateToProps = (state, props) => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
-  invoice: state.products.invoicesList.results.find(invoice => invoice.id === parseInt(props.match.params["id"], 10)),
+  invoice: state.requests.requestsList.find(invoice => invoice.id === parseInt(props.match.params["id"], 10)),
   testItem: props
 });
 

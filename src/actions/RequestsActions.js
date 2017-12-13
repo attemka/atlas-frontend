@@ -74,7 +74,7 @@ export function updateInvoiceStatus(id, data ) {
 
 export function getRequests() {
   return {
-    types: actionTypesFor("display", "requests"),
+    types: actionTypesFor("index", "requests"),
     meta: {
       fetch: {
         url: `~products/invoice/all?page_size=100`,
@@ -82,4 +82,16 @@ export function getRequests() {
       }
     }
   };
+}
+
+export function getRequest(id) {
+  return {
+    types: actionTypesFor('index', 'requests'),
+    meta: {
+      fetch :{
+        url: `~products/invoice/${id}`
+      },
+      request_id: id
+    }
+  }
 }

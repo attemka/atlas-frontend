@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Provider } from "react-redux";
-import { BrowserRouter, browserHistory } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import setUpStore from "./store";
 
 import routes from "./routes";

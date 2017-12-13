@@ -1,5 +1,7 @@
 import { btoa } from 'Base64';
 
+export const LOGOUT = 'LOGOUT'
+
 const initialState = {
     token: undefined,
     email: undefined,
@@ -26,6 +28,8 @@ export default {
                     action.meta.email,
                     action.meta.password,
                 );
+            case LOGOUT:
+                return initialState
             default:
                 return state;
         }

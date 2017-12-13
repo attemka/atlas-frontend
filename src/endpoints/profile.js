@@ -14,6 +14,7 @@ export default {
     switch (action.type) {
     case authActions.success:
       return { ...state, profileData: action.payload };
+    case this.types.update.success: 
     case this.types.index.success:
       return { ...state, profileData: action.payload };
 

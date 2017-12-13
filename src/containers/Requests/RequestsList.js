@@ -24,7 +24,7 @@ class RequestsList extends Component {
       <div className="requests-list-wrapper">
         {invoicesList.length !== 0 &&
           invoicesList.map(invoice => (
-            <Card className="invoice-card" onClick={() => this.props.history.push(`/requests/${invoice.id}`)}>
+            <Card key={invoice.id} className="invoice-card" onClick={() => this.props.history.push(`/requests/${invoice.id}`)}>
               <CardHeader titleStyle={{fontWeight: "800", fontSize: "20px"}} title={`Заявка №${invoice.id}`} />
               <CardText>
                 <div className="invoice-info"><span className="category-name">Из: </span>{" " + invoice.from_account.name} </div>
@@ -44,7 +44,7 @@ RequestsList.defaultProps = {
 const mapStateToProps = state => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
-  invoicesList: state.products.invoicesList.results
+  invoicesList: state.requests.requestsList
 });
 
 const mapDispatchToProps = {

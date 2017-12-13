@@ -19,6 +19,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "fetch-middleware-for-redux": "^1.0.1",
     "immutable": "^3.8.1",
+    "immutability-helper": "^2.4.0",
     "lodash": "^4.17.4",
     "material-ui": "^0.19.4",
     "moment": "^2.19.0",

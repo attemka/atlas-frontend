@@ -11,19 +11,21 @@ import SignUp from "../SignUp";
 import "./App.scss";
 import HeaderAppbar from "../../components/header-appbar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Profile from '../Profile'
 
 class App extends Component {
   render() {
     return (
       <MuiThemeProvider>
         <div className="app-wrapper">
-          <HeaderAppbar />
+          <HeaderAppbar history={this.props.history} />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
           <Route exact path="/requests" component={RequestsList} />
           <Route exact path="/requests/new" component={NewRequest} />
           <Route path="/requests/:id" component={RequestItem} />
+          <Route path="/profile" component={Profile}/>  
         </div>
       </MuiThemeProvider>
     );
