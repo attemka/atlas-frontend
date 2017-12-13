@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests } from "../../actions/RequestsActions";
 import { updateInvoiceStatus } from "../../actions/RequestsActions";
-import { Card, CardHeader, CardText } from "material-ui/Card";
+import { Card, CardHeader, CardText, CardActions } from "material-ui/Card";
 import api from "../../api";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import moment from "moment";
 import "./RequestItem.scss";
 import _ from "lodash";
+import ReactPaginate from "react-paginate";
 
 const STATUS_NAMES = {
   0: "Создано",
@@ -20,7 +21,7 @@ const STATUS_NAMES = {
 class RequestItem extends Component {
   constructor(props) {
     super(props);
-    this.props.getRequests();
+    this.props.getRequests([0, 1], 1);
     this.state = {
       trackingNum: ""
     };
@@ -30,8 +31,11 @@ class RequestItem extends Component {
   };
 
   updateInvioceStatus = () => {
-    this.props
-      .updateInvoiceStatus(this.props.invoice.id, { status: this.props.invoice.status + 1 })
+    this.props.updateInvoiceStatus(this.props.invoice.id, { status: this.props.invoice.status + 1 });
+  };
+
+  cancelInvoice = () => {
+    this.props.updateInvoiceStatus(this.props.invoice.id, { status: 3 });
   };
 
   sendTrackingNumber = () => {
@@ -86,7 +90,7 @@ class RequestItem extends Component {
             <CardHeader
               titleStyle={{ fontWeight: "800", fontSize: "20px" }}
               title={`Заявка №${invoice.id}`}
-              subTitle={`${invoice.from_account.name} - ${invoice.to_account.name}`}
+              subtitle={`${invoice.from_account.name} - ${invoice.to_account.name}`}
             />
             <CardText>
               <div className="card-content">
@@ -136,10 +140,15 @@ class RequestItem extends Component {
                       invoice.status !== 3 && (
                         <RaisedButton onClick={() => this.updateInvioceStatus()} label="Изменить" />
                       )}
+                    {invoice.status !== 2 &&
+                      invoice.status !== 3 && <RaisedButton onClick={this.cancelInvoice} label="Аннулировать заявку" />}
                   </div>
                 )}
               </div>
             </CardText>
+            <CardActions>
+              <RaisedButton label="К списку заявок" onClick={() => this.props.history.push("/requests/")} />
+            </CardActions>
           </Card>
         )}
       </div>

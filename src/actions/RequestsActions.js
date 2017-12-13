@@ -72,12 +72,17 @@ export function updateInvoiceStatus(id, data ) {
     };
 }
 
-export function getRequests() {
+export function getRequests(statuses, page) {
+  let statusString;
+  if (statuses && statuses.length){
+    statusString = statuses.map(el => `status=${el}`).join('&&');
+  }
+
   return {
     types: actionTypesFor("index", "requests"),
     meta: {
       fetch: {
-        url: `~products/invoice/all?page_size=100`,
+        url: `~products/invoice/all?${statusString || ""}&page=${page}&page_size=9`,
         method: "GET"
       }
     }
