@@ -20,6 +20,7 @@ import { checkRequest, getAccountById, getAllAccounts, sendRequest } from "../..
 import api from "../../api";
 import _ from "lodash";
 import "./NewRequest.scss";
+import Chip from 'material-ui/Chip';
 
 const SEND_TYPE = 1;
 const RECIEVE_TYPE = 0;
@@ -33,6 +34,10 @@ const nullAddressObject = {
   house: null,
   zip: null
 };
+
+const buttonStyle = {
+  margin:12,
+}
 
 class NewRequest extends Component {
   static propTypes = {
@@ -48,7 +53,8 @@ class NewRequest extends Component {
       dropDownValue: 0,
       receiverAccountId: this.props.currentAccount.id,
       selectedData: [],
-      target: 0
+      target: 0,
+      typeFilter:''
     };
   }
 
@@ -235,17 +241,48 @@ class NewRequest extends Component {
     );
   };
 
+  filterPicked = (typeFilter) => {
+    this.setState({
+      ...this.state,
+      typeFilter
+    })
+  }
+
+  renderOneFilter = (filterType, i) => {
+    return this.state.typeFilter === filterType ? <RaisedButton key={i} label={filterType} primary style={buttonStyle}/>
+      : <RaisedButton key={i} label={filterType} style={buttonStyle} onClick={this.filterPicked.bind(this, filterType)}/>
+  }
+
+  renderFilterTypes = () => {
+    if(!this.props.filterTypes.length) return null
+    return (
+      <div>
+        { this.props.filterTypes.map(this.renderOneFilter)}
+        { this.state.typeFilter != '' ? (
+          <Chip onRequestDelete={this.filterPicked.bind(this, '')}
+                onClick={this.filterPicked.bind(this, '')}
+                style={buttonStyle}>
+              Сбросить фильтр
+          </Chip>
+        ) : null}
+      </div>)
+  }
+
   renderTable = () => {
     const { dropDownValue, selectedData } = this.state;
     return (
       <div>
-        <SelectableTable
-          className="requests-table"
-          onSelectChange={this.handleSelectChange}
-          selection={selectedData}
-          forInvoices={true}
-          showOwn={dropDownValue !== RECIEVE_TYPE}
-        />
+        {this.renderFilterTypes()}
+        <Card style={{margin:12}}>
+          <SelectableTable
+            className="requests-table"
+            onSelectChange={this.handleSelectChange}
+            selection={selectedData}
+            forInvoices={true}
+            typeFilter={this.state.typeFilter}
+            showOwn={dropDownValue !== RECIEVE_TYPE}
+          />
+        </Card>
         <div className="apply-btn">
           <RaisedButton label="Подтвердить" onClick={this.onSelectConfirm} />
         </div>
@@ -364,7 +401,8 @@ const mapStateToProps = state => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
   accounts: state.accounts.accountList,
-  requestInfo: state.requests.currentRequestMetaInfo
+  requestInfo: state.requests.currentRequestMetaInfo,
+  filterTypes: state.filters.filterTypes
 });
 
 const mapDispatchToProps = {

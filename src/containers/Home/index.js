@@ -5,6 +5,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import {loadTypeFilters, loadInnerTypeFilters} from '../../actions/FilterActions'
 import { connect } from 'react-redux'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
 
 const buttonStyle = {
   margin:12,
@@ -39,6 +40,13 @@ class Home extends Component {
     return (
       <div>
         { this.props.filterTypes.map(this.renderOneFilter)}
+        { this.state.typeFilter != '' ? (
+          <Chip onRequestDelete={this.filterPicked.bind(this, '')}
+                onClick={this.filterPicked.bind(this, '')}
+                style={buttonStyle}>
+              Сбросить фильтр
+          </Chip>
+        ) : null}
       </div>)
   }
 

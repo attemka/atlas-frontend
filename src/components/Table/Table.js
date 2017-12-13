@@ -7,7 +7,6 @@ import { getProducts } from '../../actions/ProductsActions';
 import moment from 'moment';
 import { columns } from './SelectableTable'
 
-
 class Table extends Component {
 
     constructor(props) {
@@ -19,7 +18,7 @@ class Table extends Component {
 
     componentWillMount() {
         const { getProducts, showOwn, typeFilter } = this.props;
-        getProducts({page: this.state.page, page_size: 20, show_own: showOwn, type_filter: typeFilter})
+        getProducts({page: this.state.currPage, page_size: 20, show_own: showOwn, type_filter: typeFilter})
     }
 
     onPageChanged = (page) => {

@@ -53,25 +53,25 @@ class SelectableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      columns: [],
       selection: props.selection || [],
       selectAll: false,
       currPage: 1
     };
   }
   componentWillMount() {
-    const { getProducts, getProductsForInvoices, showOwn, forInvoices } = this.props;
+    const { getProducts, getProductsForInvoices, showOwn, forInvoices, typeFilter } = this.props;
     forInvoices
       ? getProducts({
           page: this.state.currPage,
           page_size: 20,
-          show_own: showOwn
+          show_own: showOwn,
+          type_filter:typeFilter,
         })
       : getProductsForInvoices({
           page: this.state.currPage,
           page_size: 20,
-          show_own: showOwn
+          show_own: showOwn,
+          type_filter:typeFilter
         })
   }
 
@@ -107,11 +107,24 @@ class SelectableTable extends Component {
 
   onPageChanged = (page) => {
     this.setState({
+      ...this.state,
       currPage: page+1
     })
-    const { getProducts, getProductsForInvoices, showOwn,forInvoices  } = this.props;
-    if (forInvoices) getProductsForInvoices({page:page+1, page_size: 20, show_own: showOwn})
-    else getProducts({page:page+1, page_size: 20, show_own: showOwn})
+    const { getProducts, getProductsForInvoices, showOwn,forInvoices, typeFilter  } = this.props;
+    if (forInvoices) getProductsForInvoices({page:page+1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
+    else getProducts({page:page+1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps.typeFilter != this.props.typeFilter) {
+      this.setState({
+        ...this.state,
+        currPage: 1
+      })
+      const { getProducts, getProductsForInvoices, showOwn,forInvoices, typeFilter  } = nextProps;
+      if (forInvoices) getProductsForInvoices({page:1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
+      else getProducts({page:1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
+    }
   }
 
   render() {
