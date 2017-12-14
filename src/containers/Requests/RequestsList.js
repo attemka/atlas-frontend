@@ -24,6 +24,7 @@ class RequestsList extends Component {
 
   render() {
     const { invoicesList } = this.props;
+    console.log("invoices", invoicesList);
     return (
       <div className="requests-list-wrapper">
         {invoicesList.length !== 0 &&
@@ -50,6 +51,17 @@ class RequestsList extends Component {
               </CardText>
             </Card>
           ))}
+          <ReactPaginate previousLabel="пред."
+                         nextLabel="след."
+                         breakLabel={<a href="">...</a>}
+                         breakClassName={"break-me"}
+                         pageCount={this.props.totalPages}
+                         marginPagesDisplayed={2}
+                         pageRangeDisplayed={5}
+                         onPageChange={this.handlePageClick}
+                         containerClassName={"pagination"}
+                         subContainerClassName={"pages pagination"}
+                         activeClassName={"active"} />
       </div>
     );
   }
@@ -61,7 +73,8 @@ RequestsList.defaultProps = {
 const mapStateToProps = state => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
-  invoicesList: state.requests.requestsList
+  invoicesList: state.requests.requestsList,
+  totalPages: state.requests.totalPages
 });
 
 const mapDispatchToProps = {
