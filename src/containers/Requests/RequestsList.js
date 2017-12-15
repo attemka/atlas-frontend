@@ -17,10 +17,13 @@ class RequestsList extends Component {
   constructor(props) {
     super(props);
     this.props.getRequests([0, 1], 1);
-    this.state = {
-      page: 1
-    };
+
   }
+
+    handlePageChange = page =>{
+    console.log(page);
+        this.props.getRequests([0, 1], page.selected + 1);
+    };
 
   render() {
     const { invoicesList } = this.props;
@@ -58,7 +61,7 @@ class RequestsList extends Component {
                          pageCount={this.props.totalPages}
                          marginPagesDisplayed={2}
                          pageRangeDisplayed={5}
-                         onPageChange={this.handlePageClick}
+                         onPageChange={this.handlePageChange}
                          containerClassName={"pagination"}
                          subContainerClassName={"pages pagination"}
                          activeClassName={"active"} />
