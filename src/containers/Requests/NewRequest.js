@@ -103,7 +103,6 @@ class NewRequest extends Component {
 
   handleRecieverChange = (event, index, value) =>
     this.setState({
-      ...this.state,
       receiverAccountId: value
     });
 

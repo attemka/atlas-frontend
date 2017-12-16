@@ -28,7 +28,6 @@ class RequestsList extends Component {
   };
 
   handleFilterChange = (event, target, filter) =>{
-    console.log(filter);
     this.props.getRequests(filter.map(el => parseInt(el, 10)), 1);
     this.setState({filterValue: filter});
   };

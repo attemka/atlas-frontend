@@ -1,22 +1,27 @@
-.profile-wrapper {
+.filial-wrapper {
   display: flex;
   align-items: center;
   min-height: 80%;
 }
 
-.profile-card {
+.filial-card {
   display: flex;
   margin: auto;
   flex-direction: column;
   padding: 20px;
 }
 
-.profile-input-field{
+.filial-input-field{
   display: block;
-  margin: 10px;
+  margin: 0 10px;
+}
+.label{
+  display: block;
+  margin-top: 30px;
+  margin-left: 10px;
 }
 
-.profile-save-btn{
+.filial-save-btn{
   display: block;
   margin-top: 10px;
 }

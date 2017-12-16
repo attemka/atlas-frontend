@@ -6,12 +6,13 @@ import Home from "../Home";
 import Login from "../Login";
 import NewRequest from "../Requests/NewRequest";
 import RequestsList from "../Requests/RequestsList";
-import RequestItem from "../Requests/RequestItem"
+import RequestItem from "../Requests/RequestItem";
 import SignUp from "../SignUp";
 import "./App.scss";
 import HeaderAppbar from "../../components/header-appbar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import Profile from '../Profile'
+import Profile from '../Profile';
+import Filial from '../Filial';
 
 class App extends Component {
   render() {
@@ -25,7 +26,8 @@ class App extends Component {
           <Route exact path="/requests/" component={RequestsList} />
           <Route exact path="/requests/new" component={NewRequest} />
           <Route exact path="/requests/:id(\d+)" component={RequestItem} />
-          <Route path="/profile" component={Profile}/>
+          <Route path="/profile" component={Profile} />
+          <Route path="/filial" component={Filial} />
         </div>
       </MuiThemeProvider>
     );
