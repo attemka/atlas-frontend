@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { getRequests } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import api from "../../api";
+import SelectField from "material-ui/SelectField";
 import ReactPaginate from "react-paginate";
+import MenuItem from "material-ui/MenuItem";
+
 import "./RequestsList.scss";
 
 const STATUS_NAMES = {
@@ -17,17 +20,22 @@ class RequestsList extends Component {
   constructor(props) {
     super(props);
     this.props.getRequests([0, 1], 1);
-
+    this.state={filterValue: ['0', '1']}
   }
 
-    handlePageChange = page =>{
-    console.log(page);
-        this.props.getRequests([0, 1], page.selected + 1);
-    };
+  handlePageChange = page => {
+    this.props.getRequests([0, 1], page.selected + 1);
+  };
+
+  handleFilterChange = (event, target, filter) =>{
+    this.props.getRequests(filter.map(el => parseInt(el, 10)), 1);
+    this.setState({filterValue: filter});
+  };
 
   render() {
     const { invoicesList } = this.props;
-    console.log("invoices", invoicesList);
+    const {filterValue} = this.state;
+
     return (
       <div className="requests-list-wrapper">
         {invoicesList.length !== 0 &&
@@ -54,17 +62,26 @@ class RequestsList extends Component {
               </CardText>
             </Card>
           ))}
-          <ReactPaginate previousLabel="пред."
-                         nextLabel="след."
-                         breakLabel={<a href="">...</a>}
-                         breakClassName={"break-me"}
-                         pageCount={this.props.totalPages}
-                         marginPagesDisplayed={2}
-                         pageRangeDisplayed={5}
-                         onPageChange={this.handlePageChange}
-                         containerClassName={"pagination"}
-                         subContainerClassName={"pages pagination"}
-                         activeClassName={"active"} />
+        <div className="bottom-control">
+          <SelectField multiple={true} value={filterValue} onChange={this.handleFilterChange} floatingLabelText="Фильтр" >
+            {Object.keys(STATUS_NAMES).map(status =>(
+              <MenuItem key={status} value={status} primaryText={STATUS_NAMES[status]} />
+            ))}
+          </SelectField>
+        <ReactPaginate
+          previousLabel="пред."
+          nextLabel="след."
+          breakLabel={<a href="">...</a>}
+          breakClassName={"break-me"}
+          pageCount={this.props.totalPages}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageChange}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"}
+        />
+        </div>
       </div>
     );
   }

@@ -20,6 +20,16 @@
   font-weight: 800;
 }
 
+.bottom-control{
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  padding: 10px;
+}
+
+
 .invoice-info{
   display: flex;
   flex-direction: row;
@@ -33,9 +43,6 @@
 }
 
 .pagination {
-  position: absolute;
-  bottom: 10%;
-  left: 45%;
   display: flex;
   border-radius: 4px;
   list-style: none;
