@@ -24,10 +24,11 @@ class RequestsList extends Component {
   }
 
   handlePageChange = page => {
-    this.props.getRequests([0, 1], page.selected + 1);
+    this.props.getRequests(this.state.filterValue, page.selected + 1);
   };
 
   handleFilterChange = (event, target, filter) =>{
+    console.log(filter);
     this.props.getRequests(filter.map(el => parseInt(el, 10)), 1);
     this.setState({filterValue: filter});
   };
