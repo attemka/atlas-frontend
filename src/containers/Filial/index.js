@@ -35,37 +35,36 @@ class Filial extends Component {
   addStaff = () => {
     this.props.addStaff(this.state.staffEmail);
     this.setState({ staffEmail: "" });
-  }
+  };
 
   render() {
     const { profile } = this.props;
-    console.log(profile.account);
-    // if (!profile.account.isAdmin) this.props.history.push('/');
+    if (!profile.account.isAdmin) this.props.history.push('/');
     return (
       <div className="filial-wrapper">
         <Card className="filial-card">
           <CardHeader title="Управление филиалом" showExpandableButton={false} />
           <div className="label">Изменить имя филиала:</div>
           <div className="input-block">
-          <TextField
-            className="filial-input-field"
-            name="filial-name"
-            floatingLabelText="Имя"
-            value={this.state.name}
-            onChange={e => this.changeName(e.target.value)}
-          />
-          <RaisedButton className="filial-save-btn" label={"Сохранить"} primary onClick={this.changeProfileName} />
+            <TextField
+              className="filial-input-field"
+              name="filial-name"
+              floatingLabelText="Имя"
+              value={this.state.name}
+              onChange={e => this.changeName(e.target.value)}
+            />
+            <RaisedButton className="filial-save-btn" label={"Сохранить"} primary onClick={this.changeProfileName} />
           </div>
           <div className="label"> Добавить сотрудника в филиал:</div>
           <div className="input-block">
-          <TextField
-            className="filial-input-field"
-            name="add-stuff"
-            floatingLabelText="E-mail сотрудника"
-            value={this.state.staffEmail}
-            onChange={e => this.changeStaffEmail(e.target.value)}
-          />
-          <RaisedButton className="filial-save-btn" label={"Добавить"} primary onClick={this.addStaff} />
+            <TextField
+              className="filial-input-field"
+              name="add-stuff"
+              floatingLabelText="E-mail сотрудника"
+              value={this.state.staffEmail}
+              onChange={e => this.changeStaffEmail(e.target.value)}
+            />
+            <RaisedButton className="filial-save-btn" label={"Добавить"} primary onClick={this.addStaff} />
           </div>
         </Card>
       </div>

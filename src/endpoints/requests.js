@@ -41,7 +41,9 @@ export default {
           requestType: action.payload.invoice_type
         }
       };
+    case "clearMeta":
     case this.types.create.success:
+      console.log("was");
       return {
         ...state,
         currentRequestMetaInfo: {

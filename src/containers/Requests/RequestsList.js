@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getRequests } from "../../actions/RequestsActions";
+import { getRequests, clearMetainfo } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import api from "../../api";
 import SelectField from "material-ui/SelectField";
@@ -19,68 +19,76 @@ const STATUS_NAMES = {
 class RequestsList extends Component {
   constructor(props) {
     super(props);
+    props.clearMetainfo();
     this.props.getRequests([0, 1], 1);
-    this.state={filterValue: ['0', '1']}
+    this.state = { filterValue: ["0", "1"] };
   }
 
   handlePageChange = page => {
     this.props.getRequests(this.state.filterValue, page.selected + 1);
   };
 
-  handleFilterChange = (event, target, filter) =>{
+  handleFilterChange = (event, target, filter) => {
     this.props.getRequests(filter.map(el => parseInt(el, 10)), 1);
-    this.setState({filterValue: filter});
+    this.setState({ filterValue: filter });
   };
 
   render() {
     const { invoicesList } = this.props;
-    const {filterValue} = this.state;
+    const { filterValue } = this.state;
 
     return (
       <div className="requests-list-wrapper">
-        {invoicesList.length !== 0 &&
-          invoicesList.map(invoice => (
-            <Card
-              key={invoice.id}
-              className="invoice-card"
-              onClick={() => this.props.history.push(`/requests/${invoice.id}`)}
-            >
-              <CardHeader titleStyle={{ fontWeight: "800", fontSize: "20px" }} title={`Заявка №${invoice.id}`} />
-              <CardText>
-                <div className="invoice-info">
-                  <span className="category-name">Из: </span>
-                  {" " + invoice.from_account.name}{" "}
-                </div>
-                <div className="invoice-info">
-                  <span className="category-name">В: </span>
-                  {" " + invoice.to_account.name}
-                </div>
-                <div className="invoice-info">
-                  <span className="category-name">Статус: </span>
-                  {" " + STATUS_NAMES[invoice.status]}
-                </div>
-              </CardText>
-            </Card>
-          ))}
+        <div className="requests-block">
+          {invoicesList.length !== 0 &&
+            invoicesList.map(invoice => (
+              <Card
+                key={invoice.id}
+                className="invoice-card"
+                onClick={() => this.props.history.push(`/requests/${invoice.id}`)}
+              >
+                <CardHeader titleStyle={{ fontWeight: "800", fontSize: "20px" }} title={`Заявка №${invoice.id}`} />
+                <CardText>
+                  <div className="invoice-info">
+                    <span className="category-name">Из: </span>
+                    {" " + invoice.from_account.name}{" "}
+                  </div>
+                  <div className="invoice-info">
+                    <span className="category-name">В: </span>
+                    {" " + invoice.to_account.name}
+                  </div>
+                  <div className="invoice-info">
+                    <span className="category-name">Статус: </span>
+                    {" " + STATUS_NAMES[invoice.status]}
+                  </div>
+                </CardText>
+              </Card>
+            ))}
+        </div>
         <div className="bottom-control">
-          <SelectField multiple={true} value={filterValue} onChange={this.handleFilterChange} floatingLabelText="Фильтр" >
-            {Object.keys(STATUS_NAMES).map(status =>(
+          <SelectField
+            multiple={true}
+            value={filterValue}
+            onChange={this.handleFilterChange}
+            floatingLabelText="Фильтр"
+          >
+            {Object.keys(STATUS_NAMES).map(status => (
               <MenuItem key={status} value={status} primaryText={STATUS_NAMES[status]} />
             ))}
           </SelectField>
-        <ReactPaginate
-          previousLabel="пред."
-          nextLabel="след."
-          breakLabel={<a href="">...</a>}
-          breakClassName={"break-me"}
-          pageCount={this.props.totalPages}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageChange}
-          containerClassName={"pagination"}
-          subContainerClassName={"pages pagination"}
-          activeClassName={"active"}
-        />
+          <ReactPaginate
+            previousLabel="пред."
+            nextLabel="след."
+            breakLabel={<a href="">...</a>}
+            breakClassName={"break-me"}
+            pageCount={this.props.totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={this.handlePageChange}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+          />
         </div>
       </div>
     );
@@ -98,6 +106,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getRequests
+  getRequests,
+  clearMetainfo
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RequestsList);

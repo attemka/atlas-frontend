@@ -60,7 +60,6 @@ class SignUp extends Component {
 
   verifyPasswords = () => {
     const { password, passwordRepeat } = this.state;
-    console.log(passwordRepeat === true);
     if (password && passwordRepeat) this.setState({ passwordValid: password === passwordRepeat });
   };
 

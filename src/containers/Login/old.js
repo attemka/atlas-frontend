@@ -47,7 +47,6 @@ class Login extends Component {
     };
 
     render() {
-        console.log(this.props.history);
         let { email, password, loginFailed } = this.state;
         return (
             <div className="page-wrapper">

@@ -150,13 +150,6 @@ class NewRequest extends Component {
       house
     } = this.state;
     const addressFields = ["contact_phone", "city", "zip", "contact_name", "street", "house"];
-    console.log(receiverAccountId, customAddress, selectedData.length);
-    console.log( 'case',
-      _(this.state)
-        .pick(addressFields)
-        .pickBy().toPairs().value().length === addressFields.length
-    );
-    console.log(contact_phone, city, zip, contact_name, street, house);
     if (selectedData.length === 0) return true;
     return !(receiverAccountId
       ? customAddress
@@ -204,7 +197,6 @@ class NewRequest extends Component {
 
     if (customAddress) data['custom_address'] = customAddressData;
     else data['address'] = receiverAccountId;
-    console.log(data);
     this.setState({selectedData: []});
     this.props.sendRequest(data).then(()=> this.props.history.push('/requests'))
   };

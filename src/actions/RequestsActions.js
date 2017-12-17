@@ -100,3 +100,9 @@ export function getRequest(id) {
     }
   };
 }
+
+export function clearMetainfo() {
+  return {
+    type: "clearMeta"
+  };
+}

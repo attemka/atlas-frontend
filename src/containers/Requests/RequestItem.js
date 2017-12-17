@@ -82,7 +82,6 @@ class RequestItem extends Component {
 
   render() {
     const { invoice } = this.props;
-    console.log(invoice);
     const { trackingNum } = this.state;
     return (
       <div className="requests-item-wrapper">
