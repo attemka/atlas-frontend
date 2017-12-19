@@ -4,7 +4,7 @@ module.exports = [
     exclude: /(node_modules|bower_components|public\/)/,
     loader: "babel-loader",
     query: {
-      presets: ['es2015', 'stage-0', 'react'],
+      presets: ['es2015', 'stage-1', 'react'],
       plugins: ['transform-runtime']
     }
   },

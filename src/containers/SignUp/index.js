@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {Redirect} from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import { signup } from "../../actions/LoginActions";
 import "./SignUp.scss";
+import TextField from "material-ui/TextField";
+import RaisedButton from "material-ui/RaisedButton";
+import { Card } from "material-ui/Card";
 
 class SignUp extends Component {
   constructor(props) {
@@ -21,12 +24,12 @@ class SignUp extends Component {
 
   handleChange = e => {
     const types = {
-      Имя: "name",
+      name: "name",
       "E-mail": "email",
-      Пароль: "password",
-      "Подтверждение пароля": "passwordRepeat"
+      password: "password",
+      passwordRepeat: "passwordRepeat"
     };
-    let field = types[e.target.placeholder];
+    let field = types[e.target.name];
     let obj = {};
     obj[field] = e.target.value;
     this.setState(obj);
@@ -46,10 +49,10 @@ class SignUp extends Component {
             loginFailed: false,
             emailValid: true,
             passwordValid: true,
-            error:false,
+            error: false,
             authPassed: true
           });
-          browserHistory.push('/')
+          browserHistory.push("/");
         })
         .catch(error => {
           console.error(error);
@@ -60,7 +63,6 @@ class SignUp extends Component {
 
   verifyPasswords = () => {
     const { password, passwordRepeat } = this.state;
-    console.log(passwordRepeat === true);
     if (password && passwordRepeat) this.setState({ passwordValid: password === passwordRepeat });
   };
 
@@ -71,66 +73,64 @@ class SignUp extends Component {
 
   render() {
     let { name, email, password, passwordRepeat, emailValid, passwordValid } = this.state;
+    const cardStyle = {
+      display: "flex",
+      flexDirection: "column",
+      margin: "auto"
+    };
+
+    const fieldStyle = {
+      display: "block",
+      margin: "10px"
+    };
+
     return (
-      <div className="signup-page-wrapper">
-        <div className="signup-wrapper">
-          {this.state.authPassed ? <Redirect to='/'/> : null}
-          <form className="pure-form pure-form-stacked">
-            <fieldset>
-              <input placeholder="Имя" value={name} onChange={e => this.handleChange(e)} type="text" required />
-              <input
-                placeholder="E-mail"
-                value={email}
-                onChange={e => this.handleChange(e)}
-                onBlur={this.verifyEmail}
-                type="text"
-                required
-              />
-              {!emailValid && (
-                <span class="pure-form-message" style={{ color: "red" }}>
-                  E-mail указан неверно. Проверьте правильность ввода.
-                </span>
-              )}
-              <input
-                placeholder="Пароль"
-                value={password}
-                onChange={e => this.handleChange(e)}
-                onBlur={this.verifyPasswords}
-                type="password"
-                required
-              />
-              <input
-                placeholder="Подтверждение пароля"
-                value={passwordRepeat}
-                onChange={e => this.handleChange(e)}
-                onBlur={this.verifyPasswords}
-                type="password"
-                required
-              />
-              {!passwordValid && (
-                <span class="pure-form-message" style={{ color: "red" }}>
-                  Указанные пароли не совпадают.
-                </span>
-              )}
-              {this.state.error && (
-                <span class="pure-form-message" style={{ color: "red" }}>
-                  Произошла ошибка. Попробуйте снова.
-                </span>
-              )}
-              <button type="button" className="pure-button pure-button-primary" onClick={() => this.handlePress()}>
-                Зарегистрироваться
-              </button>
-            </fieldset>
-          </form>
-        </div>
+      <div className="signup-wrapper">
+        <Card style={cardStyle}>
+          <TextField
+            style={fieldStyle}
+            name="name"
+            floatingLabelText="Имя"
+            value={name}
+            onChange={e => this.handleChange(e)}
+          />
+          <TextField
+            style={fieldStyle}
+            name="E-mail"
+            floatingLabelText="E-mail"
+            value={email}
+            onChange={e => this.handleChange(e)}
+            onBlur={this.verifyEmail}
+            errorText={emailValid ? null : "E-mail указан неверно. Проверьте правильность ввода."}
+          />
+          <TextField
+            style={fieldStyle}
+            name="password"
+            floatingLabelText="Пароль"
+            value={password}
+            type="password"
+            onBlur={this.verifyPasswords}
+            onChange={e => this.handleChange(e)}
+          />
+          <TextField
+            style={fieldStyle}
+            name="passwordRepeat"
+            floatingLabelText="Повторите пароль"
+            value={passwordRepeat}
+            type="password"
+            onBlur={this.verifyPasswords}
+            onChange={e => this.handleChange(e)}
+            errorText={passwordValid ? null : "Указанные пароли не совпадают"}
+          />
+          <RaisedButton style={fieldStyle} label="Зарегистрироваться" primary={true} onClick={this.handlePress} />
+        </Card>
       </div>
     );
   }
 }
 
-
 const mapStateToProps = state => ({
-  isLogged : state.auth.authenticated
-})
+  isLogged: state.auth.authenticated
+});
 
 export default connect(mapStateToProps, { signup })(SignUp);

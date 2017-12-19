@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Provider } from "react-redux";
-import { BrowserRouter, browserHistory } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import setUpStore from "./store";
-import "purecss/build/pure.css";
 
 import routes from "./routes";
 
@@ -20,7 +19,7 @@ class Root extends Component {
   };
 
   render() {
-    if (!this.state.store) return <div>Loading...</div>;
+    if (!this.state.store) return null;
     return (
       <Provider store={this.state.store}>
         <BrowserRouter>{routes}</BrowserRouter>

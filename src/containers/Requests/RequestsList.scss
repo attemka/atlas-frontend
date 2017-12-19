@@ -1,0 +1,77 @@
+@import "../../assets/theme/default.scss";
+
+.requests-list-wrapper {
+  max-height: 90%;
+}
+.requests-block{
+  display: flex;
+  padding: 0 10%;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-height: 500px;
+  max-height: 90%;
+  z-index: 1;
+}
+.invoice-card{
+  cursor: pointer;
+  display: flex;
+  margin: 20px calc(19%/6);
+  flex: 0 27%;
+  max-height: 200px;
+}
+.card-header{
+  font-weight: 800;
+}
+
+.bottom-control{
+  display: flex;
+  justify-self: center;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  padding: 10px;
+}
+
+
+.invoice-info{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+  .category-name{
+    font-weight: 600;
+    padding-right: 5px;
+    //flex-basis: 60px;
+  }
+}
+
+.pagination {
+  display: flex;
+  border-radius: 4px;
+  list-style: none;
+  padding-right: 40px;
+
+  background-color: deepskyblue;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  max-width: 180px;
+
+  li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 0 10px;
+    color: white;
+  }
+
+  .active{
+    border: 1px solid white;
+  }
+}
+

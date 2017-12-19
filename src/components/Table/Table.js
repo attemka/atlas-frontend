@@ -1,57 +1,69 @@
-import React, { Component } from "react";
-import "./Table.scss";
-import "react-table/react-table.css";
-import ReactTable from "react-table";
-import {connect} from 'react-redux';
-import {getProducts} from "../../actions/ProductsActions"
+import React, { Component } from 'react';
+import './Table.scss';
+import 'react-table/react-table.css';
+import ReactTable from 'react-table';
+import { connect } from 'react-redux';
+import { getProducts } from '../../actions/ProductsActions';
+import moment from 'moment';
+import { columns } from './SelectableTable'
 
 class Table extends Component {
 
-  componentWillMount = ()=> {
-    this.props.getProducts()
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            currPage:1
+        };
+    }
 
-  render() {
-    console.log(this.props.productsx);
-    return (
-      <div className="table">
-          <ReactTable
-            data={this.props.products}
-            manual
-            showPageSizeOptions={false}
-            columns={[
-              {
-                Header: "ID",
-                accessor: "id"
-              },
-              {
-                Header: "Название",
-                accessor: "title"
-              },
-              {
-                Header: "Год",
-                accessor: "year"
-              },
-              {
-                Header: "Ответственный",
-                accessor: "responsible_text"
-              },
-              {
-                Header: "Когда",
-                accessor: "location_update"
-              },
-              {
-                Header: "Комментарий",
-                accessor: "comment"
-              }
-            ]}/>
-      </div>
-    );
-  }
+    componentWillMount() {
+        const { getProducts, showOwn, typeFilter } = this.props;
+        getProducts({page: this.state.currPage, page_size: 20, show_own: showOwn, type_filter: typeFilter})
+    }
+
+    onPageChanged = (page) => {
+      this.setState({
+        currPage: page+1
+      })
+      const { getProducts, showOwn, typeFilter } = this.props;
+      getProducts({page:page+1, page_size: 20, show_own: showOwn, type_filter: typeFilter})
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+
+      if(nextProps.typeFilter != this.props.typeFilter) {
+        const { getProducts, showOwn, typeFilter } = nextProps
+        this.setState({
+          currPage: 1
+        })
+        getProducts({page:1, page_size: 20, show_own: showOwn, type_filter: typeFilter})
+      }
+    }
+
+    render() {
+        return (
+                <ReactTable
+                    data={this.props.products}
+                    manual
+                    page={this.state.currPage-1}
+                    onPageChange={this.onPageChanged}
+                    pages={this.props.totalPages}
+                    loading={this.props.fetching}
+                    showPageSizeOptions={false}
+                    columns={columns}
+                />
+        );
+    }
+}
+
+Table.defaultProps = {
+  typeFilter: ''
 }
 
 const mapStateToProps = state => ({
-  products: state.products.productsList
-})
+    products: state.products.productsList,
+    totalPages: state.products.totalPages,
+    fetching: state.products.fetching
+});
 
-export default connect(mapStateToProps, {getProducts})(Table);
+export default connect(mapStateToProps, { getProducts })(Table);

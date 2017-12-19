@@ -1,0 +1,22 @@
+.profile-wrapper {
+  display: flex;
+  align-items: center;
+  min-height: 80%;
+}
+
+.profile-card {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.profile-input-field{
+  display: block;
+  margin: 10px;
+}
+
+.profile-save-btn{
+  display: block;
+  margin-top: 10px;
+}

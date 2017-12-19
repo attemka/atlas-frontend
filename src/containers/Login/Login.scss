@@ -1,15 +1,9 @@
 @import "../../assets/theme/default";
 
-.page-wrapper {
-  background-color: $main-background-color;
-  display: flex;
-  flex: 1;
-}
+
 
 .login-wrapper {
-  background-color: $light-background-color;
-  box-shadow: 5px 6px 5px 3px #bbb;
   display: flex;
-  margin: auto;
-  padding: 30px;
+  align-items: center;
+  min-height: 80%;
 }

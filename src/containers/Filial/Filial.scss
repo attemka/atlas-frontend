@@ -1,0 +1,27 @@
+.filial-wrapper {
+  display: flex;
+  align-items: center;
+  min-height: 80%;
+}
+
+.filial-card {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.filial-input-field{
+  display: block;
+  margin: 0 10px;
+}
+.label{
+  display: block;
+  margin-top: 30px;
+  margin-left: 10px;
+}
+
+.filial-save-btn{
+  display: block;
+  margin-top: 10px;
+}

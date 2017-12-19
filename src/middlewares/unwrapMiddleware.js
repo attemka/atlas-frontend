@@ -1,5 +1,4 @@
 export default store => next => action => {
-  console.log(action);
   if (!action.payload) return next(action);
   if (action.payload.data) action.payload = action.payload.data;
   if (action.payload.error) action.payload = action.payload.error;

@@ -1,14 +1,27 @@
-import {actionTypesFor} from 'trivial-redux';
+import { actionTypesFor } from "trivial-redux";
 
-export function getProducts(page=1, page_size=20){
+export function getProducts(params) {
   return {
-    types: actionTypesFor('index', 'products'),
+    types: actionTypesFor("index", "products"),
     meta: {
       fetch: {
-        url: '~products/all',
-        params: {page, page_size},
-        method: 'GET'
+        url: "~products/all",
+        params: params,
+        method: "GET"
       }
     }
-  }
+  };
+}
+
+export function getProductsForInvoices(params) {
+  return {
+    types: actionTypesFor("index", "products"),
+    meta: {
+      fetch: {
+        url: "~products/for_invoice",
+        params: params,
+        method: "GET"
+      }
+    }
+  };
 }

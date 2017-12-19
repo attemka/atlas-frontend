@@ -1,13 +1,14 @@
-import {actionTypesFor} from 'trivial-redux';
+import { actionTypesFor } from "trivial-redux";
+import { LOGOUT } from "../endpoints/auth";
 
-export function login(email, password){
+export function login(email, password) {
   return {
-    types: actionTypesFor('create', 'auth'),
-    meta:{
-      fetch:{
-        url: '~user/login',
-        method: 'POST',
-        data:{
+    types: actionTypesFor("create", "auth"),
+    meta: {
+      fetch: {
+        url: "~user/login",
+        method: "POST",
+        data: {
           email,
           password
         }
@@ -15,25 +16,31 @@ export function login(email, password){
       password,
       email
     }
-  }
+  };
 }
 
 export function signup(name, email, password, passwordRepeat) {
   return {
-    types: actionTypesFor('create', 'auth'),
-    meta:{
-      fetch:{
-        url: '~user/auth',
-        method: 'POST',
-        data:{
+    types: actionTypesFor("create", "auth"),
+    meta: {
+      fetch: {
+        url: "~user/auth",
+        method: "POST",
+        data: {
           name,
           email,
           password,
-          password_confirmation: passwordRepeat,
+          password_confirmation: passwordRepeat
         }
       },
       email,
-      password,
+      password
     }
-  }
+  };
+}
+
+export function logout() {
+  return {
+    type: LOGOUT
+  };
 }

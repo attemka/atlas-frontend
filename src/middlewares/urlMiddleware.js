@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash";
 
 let isValidFetchingAction = action => action.types && action.meta && action.meta.fetch && action.meta.fetch.url;
 
-let toEndPointUrl = url => `https://attemka.ru/${url.substr(1)}`;
+let toEndPointUrl = url => `http://35.198.95.144:8000/${url.substr(1)}`;
 
 export default store => next => action => {
   if (isValidFetchingAction(action) && action.meta.fetch.url[0] == "~") {

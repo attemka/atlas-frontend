@@ -1,0 +1,67 @@
+.requests-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.ReactModal__Overlay {
+  margin-top: 5%;
+  z-index: 1000;
+}
+.apply-btn{
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+.requests-table{
+  background-color: rgba(255,0,0,0.9);
+}
+.row-item{
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  padding: 20px 10px;
+}
+ .input-field{
+  margin: 0 10px;
+}
+ .select-field{
+   margin: 0 10px;
+   align-self: flex-end;
+ }
+.row-item{
+  flex-direction: row;
+}
+.column-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 20px;
+  flex-direction: column;
+}
+.checkbox-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 20px;
+}
+.checkbox {
+  max-width: 10%;
+}
+.custom-address,
+.filial-addresses {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin: 20px 20px;
+  justify-content: center;
+  text-align: center;
+  align-self: center;
+}
+
+.selected-items {
+  margin: 20px;
+}
