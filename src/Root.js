@@ -19,7 +19,7 @@ class Root extends Component {
   };
 
   render() {
-    if (!this.state.store) return <div>Loading...</div>;
+    if (!this.state.store) return null;
     return (
       <Provider store={this.state.store}>
         <BrowserRouter>{routes}</BrowserRouter>
