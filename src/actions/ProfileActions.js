@@ -25,7 +25,7 @@ export function getProfile() {
 }
 
 export function changeFilial(data) {
-  return{
+  return {
     types: actionTypesFor("update", "account"),
     meta: {
       fetch: {
@@ -38,12 +38,12 @@ export function changeFilial(data) {
 }
 
 export function addStaff(email) {
-  return{
+  return {
     types: actionTypesFor("update", "account"),
     meta: {
       fetch: {
         url: "~user/account/add_staff",
-        data:{email},
+        data: { email },
         method: "POST"
       }
     }

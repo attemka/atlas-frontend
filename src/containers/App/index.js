@@ -11,8 +11,8 @@ import SignUp from "../SignUp";
 import "./App.scss";
 import HeaderAppbar from "../../components/header-appbar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import Profile from '../Profile';
-import Filial from '../Filial';
+import Profile from "../Profile";
+import Filial from "../Filial";
 
 class App extends Component {
   render() {

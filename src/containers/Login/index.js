@@ -59,7 +59,7 @@ class Login extends Component {
 
     const fieldStyle = {
       display: "block",
-        margin: '20px',
+      margin: "20px"
     };
 
     const slideDown = {
@@ -69,7 +69,7 @@ class Login extends Component {
 
     return (
       <div className="login-wrapper">
-          {this.state.loginPassed ? <Redirect to="/" /> : null}
+        {this.state.loginPassed ? <Redirect to="/" /> : null}
         <Card style={style}>
           <TextField
             style={fieldStyle}
@@ -84,7 +84,7 @@ class Login extends Component {
             floatingLabelText="Пароль"
             value={password}
             type="password"
-            errorText={ loginFailed ? "Логин или пароль введены неверно" : null}
+            errorText={loginFailed ? "Логин или пароль введены неверно" : null}
             onChange={e => this.handleChange(e)}
           />
           <RaisedButton

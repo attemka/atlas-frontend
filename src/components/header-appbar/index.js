@@ -42,7 +42,7 @@ class HeaderAppbar extends Component {
     const Login = () => (
       <div>
         <FlatButton href="/login" label="Логин" labelStyle={{ color: "white" }} />
-        <FlatButton href="/signup" label="Регистрация" labelStyle={{ color: "white" }} />;
+        <FlatButton href="/signup" label="Регистрация" labelStyle={{ color: "white" }} />
       </div>
     );
 

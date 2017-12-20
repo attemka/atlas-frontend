@@ -25,18 +25,14 @@ class Profile extends Component {
   };
 
   render() {
-    const {profile} = this.props;
+    const { profile } = this.props;
 
     return (
       <div className="profile-wrapper">
         <Card className="profile-card">
           <CardHeader
             title="Профиль"
-            subtitle={
-              profile.is_admin
-                ? `Админ в ${profile.account.name}`
-                : `Сотрудник в ${profile.account.name}`
-            }
+            subtitle={profile.is_admin ? `Админ в ${profile.account.name}` : `Сотрудник в ${profile.account.name}`}
             showExpandableButton={false}
           />
           <TextField

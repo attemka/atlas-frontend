@@ -2,7 +2,6 @@ import React from "react";
 
 export default Component => {
   const wrapper = class RTCheckboxTable extends React.Component {
-
     rowSelector = row => {
       if (!row || !row.hasOwnProperty(this.props.keyField)) return null;
       const checked = this.props.isSelected(row[this.props.keyField]);

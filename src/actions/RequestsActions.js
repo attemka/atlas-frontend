@@ -39,8 +39,8 @@ export function getAllAccounts() {
   };
 }
 
-export function sendRequest(data){
-  return{
+export function sendRequest(data) {
+  return {
     types: actionTypesFor("create", "requests"),
     meta: {
       fetch: {
@@ -51,7 +51,7 @@ export function sendRequest(data){
           address: data.address,
           customAddress: data.customAddress,
           comment: data.comment,
-          target: data.target,
+          target: data.target
         },
         method: "POST"
       }
@@ -59,7 +59,7 @@ export function sendRequest(data){
   };
 }
 
-export function updateInvoiceStatus(id, data ) {
+export function updateInvoiceStatus(id, data) {
   return {
     types: actionTypesFor("update", "requests"),
     meta: {
@@ -74,7 +74,7 @@ export function updateInvoiceStatus(id, data ) {
 
 export function getRequests(statuses, page) {
   let statusString;
-  if (statuses && statuses.length){
+  if (statuses && statuses.length) {
     statusString = statuses.map(el => `status=${el}`).join("&");
   }
 
@@ -93,7 +93,7 @@ export function getRequest(id) {
   return {
     types: actionTypesFor("show", "requests"),
     meta: {
-      fetch :{
+      fetch: {
         url: `~products/invoice/${id}`
       },
       request_id: id

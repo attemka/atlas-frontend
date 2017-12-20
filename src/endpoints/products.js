@@ -3,7 +3,7 @@ import { actionTypesFor } from "trivial-redux";
 const initialState = {
   totalPages: 0,
   productsList: [],
-  fetching: false,
+  fetching: false
 };
 
 export default {
@@ -16,7 +16,7 @@ export default {
         return {
           ...state,
           fetching: true
-        }
+        };
       case this.types.index.success:
         return {
           ...state,
@@ -28,9 +28,9 @@ export default {
         return {
           ...state,
           fetching: false
-        }
-    default:
-      return state;
+        };
+      default:
+        return state;
     }
   }
 };

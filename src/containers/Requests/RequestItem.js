@@ -162,7 +162,7 @@ RequestItem.defaultProps = {
 const mapStateToProps = (state, props) => ({
   isLogged: state.auth.authenticated,
   currentAccount: state.profile.profileData.account,
-  invoice: state.requests.requestsList.find(el => el.id=== parseInt(props.match.params["id"], 10)),
+  invoice: state.requests.requestsList.find(el => el.id === parseInt(props.match.params["id"], 10)),
   testItem: props
 });
 

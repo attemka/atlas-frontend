@@ -18,9 +18,9 @@ import { checkRequest, getAccountById, getAllAccounts, sendRequest } from "../..
 import api from "../../api";
 import _ from "lodash";
 import "./NewRequest.scss";
-import Chip from 'material-ui/Chip';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Chip from "material-ui/Chip";
+import ContentAdd from "material-ui/svg-icons/content/add";
+import FloatingActionButton from "material-ui/FloatingActionButton";
 
 const SEND_TYPE = 1;
 const RECIEVE_TYPE = 0;
@@ -36,8 +36,8 @@ const nullAddressObject = {
 };
 
 const buttonStyle = {
-  margin:12,
-}
+  margin: 12
+};
 
 class NewRequest extends Component {
   static propTypes = {
@@ -54,7 +54,7 @@ class NewRequest extends Component {
       receiverAccountId: this.props.currentAccount.id,
       selectedData: [],
       target: 0,
-      typeFilter:''
+      typeFilter: ""
     };
   }
 
@@ -155,12 +155,16 @@ class NewRequest extends Component {
       ? customAddress
         ? _(this.state)
             .pick(addressFields)
-            .pickBy().toPairs().value().length === addressFields.length
+            .pickBy()
+            .toPairs()
+            .value().length === addressFields.length
         : true
       : customAddress &&
         _(this.state)
           .pick(addressFields)
-          .pickBy().toPairs().value().length === addressFields.length);
+          .pickBy()
+          .toPairs()
+          .value().length === addressFields.length);
   };
 
   sendRequest = () => {
@@ -195,10 +199,10 @@ class NewRequest extends Component {
       target
     };
 
-    if (customAddress) data['custom_address'] = customAddressData;
-    else data['address'] = receiverAccountId;
-    this.setState({selectedData: []});
-    this.props.sendRequest(data).then(()=> this.props.history.push('/requests'))
+    if (customAddress) data["custom_address"] = customAddressData;
+    else data["address"] = receiverAccountId;
+    this.setState({ selectedData: [] });
+    this.props.sendRequest(data).then(() => this.props.history.push("/requests"));
   };
 
   buildTextFieldProps = (entity, text) => {
@@ -232,39 +236,45 @@ class NewRequest extends Component {
     );
   };
 
-  filterPicked = (typeFilter) => {
+  filterPicked = typeFilter => {
     this.setState({
       ...this.state,
       typeFilter
-    })
-  }
+    });
+  };
 
   renderOneFilter = (filterType, i) => {
-    return this.state.typeFilter === filterType ? <RaisedButton key={i} label={filterType} primary style={buttonStyle}/>
-      : <RaisedButton key={i} label={filterType} style={buttonStyle} onClick={this.filterPicked.bind(this, filterType)}/>
-  }
+    return this.state.typeFilter === filterType ? (
+      <RaisedButton key={i} label={filterType} primary style={buttonStyle} />
+    ) : (
+      <RaisedButton key={i} label={filterType} style={buttonStyle} onClick={this.filterPicked.bind(this, filterType)} />
+    );
+  };
 
   renderFilterTypes = () => {
-    if(!this.props.filterTypes.length) return null
+    if (!this.props.filterTypes.length) return null;
     return (
       <div>
-        { this.props.filterTypes.map(this.renderOneFilter)}
-        { this.state.typeFilter != '' ? (
-          <Chip onRequestDelete={this.filterPicked.bind(this, '')}
-                onClick={this.filterPicked.bind(this, '')}
-                style={buttonStyle}>
-              Сбросить фильтр
+        {this.props.filterTypes.map(this.renderOneFilter)}
+        {this.state.typeFilter != "" ? (
+          <Chip
+            onRequestDelete={this.filterPicked.bind(this, "")}
+            onClick={this.filterPicked.bind(this, "")}
+            style={buttonStyle}
+          >
+            Сбросить фильтр
           </Chip>
         ) : null}
-      </div>)
-  }
+      </div>
+    );
+  };
 
   renderTable = () => {
     const { dropDownValue, selectedData } = this.state;
     return (
       <div>
         {this.renderFilterTypes()}
-        <Card style={{margin:12}}>
+        <Card style={{ margin: 12 }}>
           <SelectableTable
             className="requests-table"
             onSelectChange={this.handleSelectChange}
@@ -273,7 +283,7 @@ class NewRequest extends Component {
             typeFilter={this.state.typeFilter}
             showOwn={dropDownValue !== RECIEVE_TYPE}
           />
-          <FloatingActionButton style={{ right: 40,position: 'fixed', bottom: 60}} onClick={this.onSelectConfirm}>
+          <FloatingActionButton style={{ right: 40, position: "fixed", bottom: 60 }} onClick={this.onSelectConfirm}>
             <ContentAdd />
           </FloatingActionButton>
         </Card>

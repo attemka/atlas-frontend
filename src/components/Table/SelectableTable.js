@@ -9,42 +9,42 @@ import checkboxHOC from "./checkboxHOC";
 
 const CheckboxTable = checkboxHOC(ReactTable);
 export const columns = [
-    {
-        Header: 'Название',
-        accessor: 'title',
-    },
-    {
-      Header:'Наименование',
-      accessor: 'name'
-    },
-    {
-        Header: 'Номер',
-        accessor: 'number',
-    },
-    {
-        Header: 'Номер для заказа',
-        accessor: 'number_for_order',
-    },
-    {
-        Header: 'Год выпуска',
-        accessor: 'year',
-    },
-    {
-        Header: 'Ответственный',
-        accessor: 'responsible_text',
-    },
-    {
-        Header: 'Когда',
-        id: 'UpdateDate',
-        accessor: data => {
-          if (data.location_update) return moment(data.location_update).format('DD-MM-YYYY')
-          else return ''
-        },
-    },
-    {
-        Header: 'Комментарий',
-        accessor: 'comment',
-    },
+  {
+    Header: "Название",
+    accessor: "title"
+  },
+  {
+    Header: "Наименование",
+    accessor: "name"
+  },
+  {
+    Header: "Номер",
+    accessor: "number"
+  },
+  {
+    Header: "Номер для заказа",
+    accessor: "number_for_order"
+  },
+  {
+    Header: "Год выпуска",
+    accessor: "year"
+  },
+  {
+    Header: "Ответственный",
+    accessor: "responsible_text"
+  },
+  {
+    Header: "Когда",
+    id: "UpdateDate",
+    accessor: data => {
+      if (data.location_update) return moment(data.location_update).format("DD-MM-YYYY");
+      else return "";
+    }
+  },
+  {
+    Header: "Комментарий",
+    accessor: "comment"
+  }
 ];
 
 class SelectableTable extends Component {
@@ -63,14 +63,14 @@ class SelectableTable extends Component {
           page: this.state.currPage,
           page_size: 20,
           show_own: showOwn,
-          type_filter:typeFilter,
+          type_filter: typeFilter
         })
       : getProductsForInvoices({
           page: this.state.currPage,
           page_size: 20,
           show_own: showOwn,
-          type_filter:typeFilter
-        })
+          type_filter: typeFilter
+        });
   }
 
   toggleSelection = (key, shift, row) => {
@@ -103,31 +103,32 @@ class SelectableTable extends Component {
     this.setState({ selectAll, selection });
   };
 
-  onPageChanged = (page) => {
+  onPageChanged = page => {
     this.setState({
       ...this.state,
-      currPage: page+1
-    })
-    const { getProducts, getProductsForInvoices, showOwn,forInvoices, typeFilter  } = this.props;
-    if (forInvoices) getProductsForInvoices({page:page+1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
-    else getProducts({page:page+1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
-  }
+      currPage: page + 1
+    });
+    const { getProducts, getProductsForInvoices, showOwn, forInvoices, typeFilter } = this.props;
+    if (forInvoices)
+      getProductsForInvoices({ page: page + 1, page_size: 20, show_own: showOwn, type_filter: typeFilter });
+    else getProducts({ page: page + 1, page_size: 20, show_own: showOwn, type_filter: typeFilter });
+  };
 
-  componentWillReceiveProps = (nextProps) => {
-    if(nextProps.typeFilter != this.props.typeFilter) {
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.typeFilter != this.props.typeFilter) {
       this.setState({
         ...this.state,
         currPage: 1
-      })
-      const { getProducts, getProductsForInvoices, showOwn,forInvoices, typeFilter  } = nextProps;
-      if (forInvoices) getProductsForInvoices({page:1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
-      else getProducts({page:1, page_size: 20, show_own: showOwn, type_filter:typeFilter})
+      });
+      const { getProducts, getProductsForInvoices, showOwn, forInvoices, typeFilter } = nextProps;
+      if (forInvoices) getProductsForInvoices({ page: 1, page_size: 20, show_own: showOwn, type_filter: typeFilter });
+      else getProducts({ page: 1, page_size: 20, show_own: showOwn, type_filter: typeFilter });
     }
-  }
+  };
 
   render() {
     const { toggleSelection, toggleAll, isSelected } = this;
-    const {selectAll } = this.state;
+    const { selectAll } = this.state;
 
     const checkboxProps = {
       selectAll,
@@ -139,7 +140,7 @@ class SelectableTable extends Component {
       <CheckboxTable
         ref={r => (this.checkboxTable = r)}
         data={this.props.products}
-        page={this.state.currPage-1}
+        page={this.state.currPage - 1}
         loading={this.props.fetching}
         pages={this.props.totalPages}
         onPageChange={this.onPageChanged}
