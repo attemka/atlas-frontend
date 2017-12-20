@@ -39,7 +39,7 @@ class Filial extends Component {
 
   render() {
     const { profile } = this.props;
-    if (!profile.account.isAdmin) this.props.history.push("/");
+    if (!profile.is_admin) this.props.history.push("/");
     return (
       <div className="filial-wrapper">
         <Card className="filial-card">

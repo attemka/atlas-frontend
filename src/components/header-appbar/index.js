@@ -75,7 +75,7 @@ class HeaderAppbar extends Component {
 const mapStateToProps = state => ({
   isLogged: state.auth.authenticated,
   userName: state.profile.profileData.name,
-  isAdmin: state.profile.profileData.isAdmin
+  isAdmin: state.profile.profileData.is_admin
 });
 
 export default connect(mapStateToProps, { logout })(HeaderAppbar);
