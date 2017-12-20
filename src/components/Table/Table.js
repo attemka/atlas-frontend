@@ -49,6 +49,14 @@ class Table extends Component {
         loading={this.props.fetching}
         showPageSizeOptions={false}
         columns={columns}
+          // text
+        previousText="Предыдущая"
+        nextText="Следующая"
+        loadingText="Загрузка..."
+        noDataText="Позиций не найдено"
+        pageText="Страница"
+        ofText="из"
+        rowsText="строки"
       />
     );
   }

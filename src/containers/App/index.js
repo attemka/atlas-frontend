@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import withRouter from "../../hoc/with-router";
 import { Route } from "react-router";
 import Home from "../Home";
 import Login from "../Login";

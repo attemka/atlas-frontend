@@ -147,6 +147,14 @@ class SelectableTable extends Component {
         manual
         showPageSizeOptions={false}
         columns={columns}
+        // text
+        previousText="Предыдущая"
+        nextText="Следующая"
+        loadingText="Загрузка"
+        noDataText="Позиций не найдено"
+        pageText="Страница"
+        ofText="из"
+        rowsText="строки"
         {...checkboxProps}
       />
     );
