@@ -14,6 +14,7 @@ function replaceRequestById(state, request) {
   const indexReplace = state.requestsList.findIndex(r => (r.id = request.id));
   let newRequests = state.requestsList;
   if (indexReplace !== -1) newRequests = update(state.requestsList, { $splice: [[indexReplace, 1, request]] });
+  else newRequests = update(state.requestsList, { $splice: [[0, 0, request]] });
   return { ...state, requestsList: newRequests };
 }
 
