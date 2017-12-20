@@ -57,7 +57,7 @@ class HeaderAppbar extends Component {
         anchorOrigin={{ horizontal: "right", vertical: "top" }}
       >
         <MenuItem primaryText="Управление аккаунтом" onClick={this.toAccountManaging} />
-        <MenuItem primaryText="Управление филиалом" onClick={this.toFilialManaging} />
+        {isAdmin && <MenuItem primaryText="Управление филиалом" onClick={this.toFilialManaging} />}
         <MenuItem primaryText="Выход" onClick={this.logout} />
       </IconMenu>
     );
