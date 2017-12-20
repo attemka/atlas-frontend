@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getRequests, clearMetainfo } from "../../actions/RequestsActions";
+import { getRequests } from "../../actions/RequestsActions";
 import { Card, CardHeader, CardText } from "material-ui/Card";
 import api from "../../api";
 import SelectField from "material-ui/SelectField";
@@ -19,7 +19,6 @@ const STATUS_NAMES = {
 class RequestsList extends Component {
   constructor(props) {
     super(props);
-    props.clearMetainfo();
     this.props.getRequests([0, 1], 1);
     this.state = { filterValue: ["0", "1"] };
   }
@@ -107,6 +106,5 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getRequests,
-  clearMetainfo
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RequestsList);

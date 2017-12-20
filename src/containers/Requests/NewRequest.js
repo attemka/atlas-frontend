@@ -14,7 +14,7 @@ import MenuItem from "material-ui/MenuItem";
 import { Card } from "material-ui/Card";
 import Checkbox from "material-ui/Checkbox";
 import Dialog from "material-ui/Dialog";
-import { checkRequest, getAccountById, getAllAccounts, sendRequest } from "../../actions/RequestsActions";
+import { checkRequest, getAccountById, getAllAccounts, sendRequest, clearMetainfo } from "../../actions/RequestsActions";
 import api from "../../api";
 import _ from "lodash";
 import "./NewRequest.scss";
@@ -46,6 +46,7 @@ class NewRequest extends Component {
   constructor(props) {
     super(props);
     this.props.loadProfile();
+    this.props.clearMetainfo();
     this.props.getAllAccounts();
     this.state = {
       modalOpen: false,
@@ -401,6 +402,7 @@ const mapDispatchToProps = {
   getAccountById,
   getAllAccounts,
   sendRequest,
+  clearMetainfo,
   loadProfile: api.actions.profile.index
 };
 

@@ -32,7 +32,7 @@ export default {
       case this.types.update.success:
         return replaceRequestById(state, action.payload);
       case this.types.show.success:
-        if (action.request_id) return replaceRequestById(state, action.payload);
+        if (action.meta.request_id) return replaceRequestById(state, action.payload);
         return {
           ...state,
           currentRequestMetaInfo: {
