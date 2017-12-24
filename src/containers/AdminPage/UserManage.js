@@ -23,13 +23,11 @@ class UserManage extends Component {
   };
 
   handleExpandChange = (userId, expanded) => {
-    console.log(expanded, userId);
     this.setState({ [userId]: expanded });
   };
 
   render() {
     const { profile, userList } = this.props;
-    console.log("render");
     if (!profile.is_admin) this.props.history.push("/");
     return (
       <div className="user-manage-wrapper">
