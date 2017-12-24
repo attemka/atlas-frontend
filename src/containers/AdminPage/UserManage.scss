@@ -8,13 +8,31 @@
 .user-manage-card {
   display: flex;
   flex-direction: column;
+  width: 75%;
 
-  .selectors{
+  .users {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex: 0.5;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px 15%;
+  }
+
+  .single-user-card {
+    max-height: 100px;
+  }
+  .single-user-card,
+  .single-user-card-expanded {
+    display: flex;
     margin: 20px;
-    & > * {
+
+    .param {
       margin: 20px;
+    }
+    .param-title {
+      font-weight: 800;
+      padding-right: 5px;
     }
   }
 }

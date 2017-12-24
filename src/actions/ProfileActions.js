@@ -60,3 +60,15 @@ export function addStaff(email) {
     }
   };
 }
+
+export function deleteUserById(userId) {
+  return {
+    types: actionTypesFor("update", "account"),
+    meta: {
+      fetch: {
+        url: `~admin2/users/${userId}`,
+        method: "DELETE"
+      }
+    }
+  };
+}
