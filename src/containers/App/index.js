@@ -15,6 +15,7 @@ import Filial from "../Filial";
 import AdminPage from "../AdminPage";
 import UserManage from "../AdminPage/UserManage";
 import ToolManage from "../AdminPage/ToolManage";
+import ToolPage from "../AdminPage/ToolPage";
 
 class App extends Component {
   render() {
@@ -33,6 +34,7 @@ class App extends Component {
           <Route exact path="/admin" component={AdminPage} />
           <Route exact path="/admin/users" component={UserManage} />
           <Route exact path="/admin/tools" component={ToolManage} />
+          <Route exact path="/admin/tools/new" component={ToolPage}/>
         </div>
       </MuiThemeProvider>
     );
