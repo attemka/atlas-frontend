@@ -25,3 +25,15 @@ export function getProductsForInvoices(params) {
     }
   };
 }
+
+export function getProductById(id) {
+  return {
+    types: actionTypesFor("show", "products"),
+    meta: {
+      fetch: {
+        url: `~admin2/products/${id}`,
+        method: "GET"
+      }
+    }
+  };
+}

@@ -10,13 +10,14 @@ import moment from "moment";
 import api from "../../api";
 
 import "./ToolPage.scss";
+import { getProductById } from "../../actions/ProductsActions";
 
 const TOOL_FIELDS = {
   number: "Номер",
   number_for_order: "Номер для заказа",
   name: "Имя",
   title: "Название",
-  responsible_text: "Отвественный",
+  responsible: "Отвественный",
   year: "Год",
   comment: "Комментарий",
   on_repair: "На ремонте",
@@ -30,13 +31,20 @@ class ToolPage extends Component {
   }
 
   componentWillMount() {
+    const id = this.props.match.params["id"];
     this.props.getAccounts();
+    if (id) {
+      this.props.getProductById(parseInt(id, 10));
+    }
   }
 
   handleFieldChange = (event, value) => {
     this.setState({ [event.target.name]: value });
   };
-  saveChanges = () => {};
+  saveChanges = () => {
+    const data = {};
+    Object.keys(TOOL_FIELDS).map(key => (data[key] = this.state[key]));
+  };
 
   render() {
     const { profile } = this.props;
@@ -56,7 +64,7 @@ class ToolPage extends Component {
                     onCheck={this.handleFieldChange}
                   />
                 );
-              else if (param === "responsible_text") {
+              else if (param === "responsible") {
                 return (
                   <SelectField floatingLabelText={TOOL_FIELDS[param]}>
                     {this.props.accounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
@@ -83,12 +91,13 @@ class ToolPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    profile: state.profile.profileData,
+  profile: state.profile.profileData,
   accounts: state.admin_accounts.accountList
 });
 
 const mapDispatchToProps = {
-  getAccounts: api.actions.admin_accounts.index
+  getAccounts: api.actions.admin_accounts.index,
+  getProductById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolPage);

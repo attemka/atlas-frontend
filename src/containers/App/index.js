@@ -34,7 +34,8 @@ class App extends Component {
           <Route exact path="/admin" component={AdminPage} />
           <Route exact path="/admin/users" component={UserManage} />
           <Route exact path="/admin/tools" component={ToolManage} />
-          <Route exact path="/admin/tools/new" component={ToolPage}/>
+          <Route exact path="/admin/tools/new" component={ToolPage} />
+          <Route exact path="/admin/tools/:id(\d+)" component={ToolPage} />
         </div>
       </MuiThemeProvider>
     );
