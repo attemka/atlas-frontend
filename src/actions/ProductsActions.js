@@ -37,3 +37,29 @@ export function getProductById(id) {
     }
   };
 }
+
+export function updateProductById(id, data) {
+  return {
+    types: actionTypesFor("update", "products"),
+    meta: {
+      fetch: {
+        url: `~admin2/products/${id}`,
+        data: data,
+        method: "PUT"
+      }
+    }
+  };
+}
+
+export function createProduct(data) {
+  return {
+    types: actionTypesFor("create", "products"),
+    meta: {
+      fetch: {
+        url: "~admin2/products",
+        data: data,
+        method: "POST"
+      }
+    }
+  };
+}

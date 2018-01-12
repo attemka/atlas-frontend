@@ -10,7 +10,7 @@ import moment from "moment";
 import api from "../../api";
 
 import "./ToolPage.scss";
-import { getProductById } from "../../actions/ProductsActions";
+import { getProductById, updateProductById, createProduct } from "../../actions/ProductsActions";
 
 const TOOL_FIELDS = {
   number: "Номер",
@@ -34,16 +34,26 @@ class ToolPage extends Component {
     const id = this.props.match.params["id"];
     this.props.getAccounts();
     if (id) {
-      this.props.getProductById(parseInt(id, 10));
+      this.props.getProductById(parseInt(id, 10)).then(response => {
+          this.setState(response.data.data);
+      });
     }
   }
+
 
   handleFieldChange = (event, value) => {
     this.setState({ [event.target.name]: value });
   };
   saveChanges = () => {
+      const id = this.props.match.params["id"];
     const data = {};
-    Object.keys(TOOL_FIELDS).map(key => (data[key] = this.state[key]));
+    Object.keys(TOOL_FIELDS).map(key => (data[key] = this.state[key] || ''));
+    if (id){
+        this.props.updateProductById(id, data);
+    } else {
+        this.props.createProduct(data);
+    }
+
   };
 
   render() {
@@ -97,7 +107,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getAccounts: api.actions.admin_accounts.index,
-  getProductById
+  getProductById,
+    updateProductById,
+    createProduct
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolPage);
