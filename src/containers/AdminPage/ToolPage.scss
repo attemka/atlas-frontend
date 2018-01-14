@@ -14,13 +14,16 @@
     display: flex;
     justify-content: center;
   }
+  & > * {
+    width: 100%;
+  }
 }
 
 .fields-set {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
 
@@ -31,4 +34,11 @@
     max-width: 256px;
     margin: 15px 10%
   }
+  
+  @media screen and (max-width: 1140px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 }

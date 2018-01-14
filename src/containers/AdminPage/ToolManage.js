@@ -34,7 +34,6 @@ class ToolManage extends Component {
   render() {
     const { profile, products } = this.props;
     if (!profile.is_admin) this.props.history.push("/");
-    console.log(products);
     return (
       <div className="tool-manage-wrapper">
         <div className="control-buttons">

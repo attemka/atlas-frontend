@@ -35,25 +35,23 @@ class ToolPage extends Component {
     this.props.getAccounts();
     if (id) {
       this.props.getProductById(parseInt(id, 10)).then(response => {
-          this.setState(response.data.data);
+        this.setState(response.data.data);
       });
     }
   }
-
 
   handleFieldChange = (event, value) => {
     this.setState({ [event.target.name]: value });
   };
   saveChanges = () => {
-      const id = this.props.match.params["id"];
+    const id = this.props.match.params["id"];
     const data = {};
-    Object.keys(TOOL_FIELDS).map(key => (data[key] = this.state[key] || ''));
-    if (id){
-        this.props.updateProductById(id, data);
+    Object.keys(TOOL_FIELDS).map(key => (data[key] = this.state[key]));
+    if (id) {
+      this.props.updateProductById(id, data);
     } else {
-        this.props.createProduct(data);
+      this.props.createProduct(data);
     }
-
   };
 
   render() {
@@ -108,8 +106,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   getAccounts: api.actions.admin_accounts.index,
   getProductById,
-    updateProductById,
-    createProduct
+  updateProductById,
+  createProduct
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolPage);
