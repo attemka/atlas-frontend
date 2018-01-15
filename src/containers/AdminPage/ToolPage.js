@@ -41,6 +41,7 @@ class ToolPage extends Component {
   }
 
   handleFieldChange = (event, value) => {
+    console.log(event.target.name, value);
     this.setState({ [event.target.name]: value });
   };
   saveChanges = () => {
@@ -74,7 +75,11 @@ class ToolPage extends Component {
                 );
               else if (param === "responsible") {
                 return (
-                  <SelectField floatingLabelText={TOOL_FIELDS[param]}>
+                  <SelectField
+                    floatingLabelText={TOOL_FIELDS[param]}
+                    value={this.state.responsible}
+                    onChange={() => this.handleFieldChange({ target: { name: "responsible" } }, this.value)}
+                  >
                     {this.props.accounts.map(account => <MenuItem value={account.id} primaryText={account.name} />)}
                   </SelectField>
                 );

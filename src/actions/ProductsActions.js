@@ -13,6 +13,32 @@ export function getProducts(params) {
   };
 }
 
+export function getProductsAsAdmin(params) {
+  return {
+    types: actionTypesFor("index", "products"),
+    meta: {
+      fetch: {
+        url: "~admin2/products",
+        params: params,
+        method: "GET"
+      }
+    }
+  };
+}
+
+export function deleteProductById(id) {
+  return {
+    types: actionTypesFor("delete", "products"),
+    meta: {
+      fetch: {
+        url: `~admin2/products/${id}`,
+        method: "DELETE"
+      }
+    }
+  };
+}
+
+
 export function getProductsForInvoices(params) {
   return {
     types: actionTypesFor("index", "products"),

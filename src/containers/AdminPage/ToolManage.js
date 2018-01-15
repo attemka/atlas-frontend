@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getProducts } from "../../actions/ProductsActions";
+import { getProductsAsAdmin, deleteProductById, getProducts } from "../../actions/ProductsActions";
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
-import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import { Card, CardText, CardHeader } from "material-ui/Card";
 import moment from "moment";
@@ -17,29 +16,45 @@ class ToolManage extends Component {
   }
 
   componentWillMount() {
-    this.props.getProducts({ page: this.state.currentPage, page_size: 10});
+    this.props.getProductsAsAdmin({ page: this.state.currentPage, page_size: 10 });
   }
 
   handlePageChange = page => {
-    this.props.getProducts({ page: page.selected + 1, page_size: 10});
+    this.props.getProductsAsAdmin({ page: page.selected + 1, page_size: 10 });
   };
 
-  handleRowSelection = (selectedRow) => {
-    console.log(selectedRow);
-    this.setState({
-      selected: selectedRow,
+  handleRowSelection = selectedRow => {
+    console.log('select', selectedRow);
+    selectedRow.length && this.setState({
+      selected: selectedRow
     });
+  };
+
+  addTool = () => {
+    this.props.history.push("/admin/tools/new");
+  };
+
+  editTool = id => {
+    this.props.history.push(`/admin/tools/${id}`);
+  };
+
+  deleteTool = id => {
+    this.props.deleteProductById(id);
   };
 
   render() {
     const { profile, products } = this.props;
+    const {selected} = this.state;
     if (!profile.is_admin) this.props.history.push("/");
     return (
       <div className="tool-manage-wrapper">
         <div className="control-buttons">
-          <RaisedButton label="Добавить" onClick={this.addTool}/>
-          <RaisedButton label="Редактировать" onClick={this.editTool}/>
-          <RaisedButton label="Удалить" onClick={this.deleteTool}/>
+          <RaisedButton label="Добавить" onClick={this.addTool} />
+          <RaisedButton
+            label="Редактировать"
+            onClick={() => selected && this.editTool(products[selected[0]].id)}
+          />
+          <RaisedButton label="Удалить" onClick={this.deleteTool} />
         </div>
         <Table onRowSelection={this.handleRowSelection}>
           <TableHeader>
@@ -59,7 +74,7 @@ class ToolManage extends Component {
           <TableBody>
             {products &&
               products.map((product, index) => (
-                <TableRow selected={this.state.selected === index}>
+                <TableRow selected={selected && selected[0] === index}>
                   <TableRowColumn>{product.title}</TableRowColumn>
                   <TableRowColumn>{product.name}</TableRowColumn>
                   <TableRowColumn>{product.number}</TableRowColumn>
@@ -101,6 +116,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  getProductsAsAdmin,
+  deleteProductById,
   getProducts
 };
 
