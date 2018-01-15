@@ -25,3 +25,41 @@ export function getProductsForInvoices(params) {
     }
   };
 }
+
+export function getProductById(id) {
+  return {
+    types: actionTypesFor("show", "products"),
+    meta: {
+      fetch: {
+        url: `~admin2/products/${id}`,
+        method: "GET"
+      }
+    }
+  };
+}
+
+export function updateProductById(id, data) {
+  return {
+    types: actionTypesFor("update", "products"),
+    meta: {
+      fetch: {
+        url: `~admin2/products/${id}`,
+        data: data,
+        method: "PUT"
+      }
+    }
+  };
+}
+
+export function createProduct(data) {
+  return {
+    types: actionTypesFor("create", "products"),
+    meta: {
+      fetch: {
+        url: "~admin2/products",
+        data: data,
+        method: "POST"
+      }
+    }
+  };
+}

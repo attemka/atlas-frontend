@@ -52,7 +52,7 @@ class SignUp extends Component {
             error: false,
             authPassed: true
           });
-          browserHistory.push("/");
+          this.props.history.push("/");
         })
         .catch(error => {
           console.error(error);

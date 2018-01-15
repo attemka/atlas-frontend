@@ -24,6 +24,17 @@ export function getProfile() {
   };
 }
 
+export function getUsers() {
+  return {
+    types: actionTypesFor("show", "profile"),
+    meta: {
+      fetch: {
+        url: "~admin2/users"
+      }
+    }
+  };
+}
+
 export function changeFilial(data) {
   return {
     types: actionTypesFor("update", "account"),
@@ -45,6 +56,18 @@ export function addStaff(email) {
         url: "~user/account/add_staff",
         data: { email },
         method: "POST"
+      }
+    }
+  };
+}
+
+export function deleteUserById(userId) {
+  return {
+    types: actionTypesFor("update", "account"),
+    meta: {
+      fetch: {
+        url: `~admin2/users/${userId}`,
+        method: "DELETE"
       }
     }
   };
